@@ -30,7 +30,9 @@ public class User extends AuditableEntity{
 
     @Email
     @NotBlank(message = "Email cannot be empty")
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "is_active", nullable = false)
     private boolean active;
 }

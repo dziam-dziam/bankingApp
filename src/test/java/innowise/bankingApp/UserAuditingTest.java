@@ -38,7 +38,6 @@ class UserAuditingTest {
 
     @BeforeEach
     void configureAuditTime() {
-        // A controlled provider makes timestamp assertions independent of execution speed.
         auditTime = CREATED_TIME;
         auditingHandler.setDateTimeProvider(() -> Optional.of(auditTime));
     }

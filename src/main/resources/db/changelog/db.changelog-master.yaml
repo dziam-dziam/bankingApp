@@ -119,3 +119,11 @@ databaseChangeLog:
             columns:
               - column:
                   name: user_id
+  - changeSet:
+      id: JAC-2-add-users-email-unique
+      author: damian
+      changes:
+        - addUniqueConstraints:
+            tableName: users
+            columnNames: email
+            constraintName: uk_users_email
