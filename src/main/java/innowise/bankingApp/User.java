@@ -33,6 +33,6 @@ public class User extends AuditableEntity{
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "active", nullable = false)
     private boolean active;
 }

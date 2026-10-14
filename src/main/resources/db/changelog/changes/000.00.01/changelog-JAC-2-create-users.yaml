@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: JAC-2-create-users
+      author: damian
+      logicalFilePath: db/changelog/db.changelog-master.yaml
+      validCheckSum: "9:d9062c2f41085e4839ff3ca0c00643ea"
+      changes:
+        - sqlFile:
+            path: create-users.sql
+            relativeToChangelogFile: true
+            splitStatements: true
