@@ -8,6 +8,6 @@ public record ResponsePaymentCardDto(
         String number,
         String holder,
         LocalDate expirationDate,
-        boolean active
+        Boolean active
 ) {
 }

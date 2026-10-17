@@ -1,5 +1,4 @@
 package innowise.bankingApp.Dtos.ResponseDtos;
-
 import java.time.LocalDate;
 
 public record  ResponseUserDto(
@@ -8,6 +7,6 @@ public record  ResponseUserDto(
         String surname,
         LocalDate birthDate,
         String email,
-        boolean active
+        Boolean active
 ) {
 }

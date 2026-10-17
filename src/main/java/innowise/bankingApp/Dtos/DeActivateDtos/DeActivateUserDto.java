@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record DeActivateUserDto(
         @NotNull(message = "Active field cannot be null")
-        boolean active
+        Boolean active
 ) {
 }

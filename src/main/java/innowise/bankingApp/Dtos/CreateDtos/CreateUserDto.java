@@ -14,7 +14,7 @@ public record CreateUserDto(
 
         @NotNull(message = "Birth date cannot be null")
         @PastOrPresent
-        LocalDate brithDate,
+        LocalDate birthDate,
 
         @Email
         @NotBlank(message = "Email cannot be empty")

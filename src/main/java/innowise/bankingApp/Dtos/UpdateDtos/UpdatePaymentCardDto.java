@@ -1,7 +1,4 @@
-package innowise.bankingApp.Dtos;
-
-import innowise.bankingApp.Entities.User;
-import jakarta.persistence.*;
+package innowise.bankingApp.Dtos.UpdateDtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -14,10 +11,6 @@ public record UpdatePaymentCardDto(
         @Positive(message = "Payment card Id cannot be negative number")
         Long id,
 
-        @NotNull(message = "User cannot be null")
-        @JoinColumn(name = "user_id", nullable = false)
-        User user,
-
         @NotBlank(message = "Card number cannot be empty")
         String number,
 
@@ -25,7 +18,6 @@ public record UpdatePaymentCardDto(
         @Size(min = 1, max = 30, message = "Holder name must be between 1 and 30 characters")
         String holder,
 
-        @Column(name = "expiration_date")
         @NotNull(message = "Expiration date cannot be null")
         LocalDate expirationDate
 ) {
