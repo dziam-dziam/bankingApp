@@ -54,4 +54,11 @@ public class PaymentCard extends AuditableEntity {
     public final int hashCode() {
         return PaymentCard.class.hashCode();
     }
+
+    public void assignUser(User user){
+        if (user.getPaymentCards().size() == 5){
+            throw new IllegalStateException("User can have maximally 5 cards assigned");
+        }
+        this.user = user;
+    }
 }

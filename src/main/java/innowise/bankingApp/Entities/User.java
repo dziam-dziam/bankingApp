@@ -23,6 +23,7 @@ public class User extends AuditableEntity {
             CascadeType.MERGE,
             CascadeType.REMOVE}
     )
+    @Size(max = 5, message = "User cannot have more than 5 cards")
     private List<PaymentCard> paymentCards = new ArrayList<>();
 
     @NotBlank(message = "Name cannot be empty")
@@ -62,5 +63,12 @@ public class User extends AuditableEntity {
     @Override
     public final int hashCode() {
         return User.class.hashCode();
+    }
+
+    public void addCard(PaymentCard newCard){
+        if (this.paymentCards.size() == 5){
+            throw new IllegalStateException("User cannot have more than 5 cards assigned");
+        }
+        paymentCards.add(newCard);
     }
 }
