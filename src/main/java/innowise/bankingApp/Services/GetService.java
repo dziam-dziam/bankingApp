@@ -13,6 +13,8 @@ import innowise.bankingApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,5 +46,23 @@ public class GetService{
                 orElseThrow(() -> new PaymentCardNotFoundByIdException(paymentCardId));
 
         return paymentCardMapper.toDto(paymentCard);
+    }
+
+    public List<ResponseUserDto> getAllUsers(){
+        List<ResponseUserDto> returnList = new ArrayList<>();
+        List<User> allUsers = userRepository.findAll();
+        for (User user : allUsers){
+            returnList.add(userMapper.toDto(user));
+        }
+        return returnList;
+    }
+
+    public List<ResponsePaymentCardDto> getAllPaymentCards(){
+        List<ResponsePaymentCardDto> returnList = new ArrayList<>();
+        List<PaymentCard> allPaymentCards = paymentCardRepository.findAll();
+        for (PaymentCard paymentCard : allPaymentCards){
+            returnList.add(paymentCardMapper.toDto(paymentCard));
+        }
+        return returnList;
     }
 }
