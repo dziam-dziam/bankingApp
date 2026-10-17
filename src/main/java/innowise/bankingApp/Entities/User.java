@@ -1,4 +1,5 @@
-package innowise.bankingApp;
+package innowise.bankingApp.Entities;
+import innowise.bankingApp.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @Table(name = "users")
 @Getter
 @Setter
-public class User extends AuditableEntity{
+public class User extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

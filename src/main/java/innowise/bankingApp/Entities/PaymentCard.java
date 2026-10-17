@@ -1,4 +1,5 @@
-package innowise.bankingApp;
+package innowise.bankingApp.Entities;
+import innowise.bankingApp.AuditableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Table(name = "payment_cards")
 @Getter
 @Setter
-public class PaymentCard extends AuditableEntity{
+public class PaymentCard extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
