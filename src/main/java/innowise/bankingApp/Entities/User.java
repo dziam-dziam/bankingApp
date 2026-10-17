@@ -36,4 +36,22 @@ public class User extends AuditableEntity {
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @Override
+    public final boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof User other)) {
+            return false;
+        }
+
+        return getId() != null && getId().equals(other.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return User.class.hashCode();
+    }
 }

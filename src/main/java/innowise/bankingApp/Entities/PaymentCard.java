@@ -35,4 +35,22 @@ public class PaymentCard extends AuditableEntity {
     private LocalDate expirationDate;
 
     private boolean active;
+
+    @Override
+    public final boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof PaymentCard other)) {
+            return false;
+        }
+
+        return getId() != null && getId().equals(other.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return PaymentCard.class.hashCode();
+    }
 }

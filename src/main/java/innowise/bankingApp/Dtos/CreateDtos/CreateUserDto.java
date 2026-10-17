@@ -1,0 +1,23 @@
+package innowise.bankingApp.Dtos.CreateDtos;
+import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
+
+public record CreateUserDto(
+        @NotBlank(message = "Name cannot be empty")
+        @Size(min = 1, max = 30, message = "Name has to be between 1 and 30 characters")
+        String name,
+
+        @NotBlank(message = "Surname cannot be empty")
+        @Size(min = 1, max = 30, message = "Surname has to be between 1 and 30 characters")
+        String surname,
+
+        @NotNull(message = "Birth date cannot be null")
+        @PastOrPresent
+        LocalDate brithDate,
+
+        @Email
+        @NotBlank(message = "Email cannot be empty")
+        String email
+) {
+}
