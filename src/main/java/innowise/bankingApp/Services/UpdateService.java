@@ -14,6 +14,7 @@ import innowise.bankingApp.Repositories.PaymentCardRepository;
 import innowise.bankingApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class UpdateService {
     private final UserMapper userMapper;
     private final PaymentCardMapper paymentCardMapper;
 
+    @Transactional
     public ResponseUserDto updateUser(Long userId, UpdateUserDto updateUserDto){
         if (userId == null){
             throw new IllegalArgumentException("Id cannot be null");
@@ -40,10 +42,12 @@ public class UpdateService {
         user.setEmail(updateUserDto.email());
         user.setBirthDate(updateUserDto.birthDate());
 
-        return userMapper.toDto(user);
+        userRepository.save(user);
 
+        return userMapper.toDto(user);
     }
 
+    @Transactional
     public ResponsePaymentCardDto updatePaymentCard(Long cardId, UpdatePaymentCardDto updateDto){
         if (cardId == null){
             throw new IllegalArgumentException("Id cannot be null");
@@ -58,6 +62,7 @@ public class UpdateService {
         paymentCard.setHolder(updateDto.holder());
         paymentCard.setExpirationDate(updateDto.expirationDate());
 
+        paymentCardRepository.save(paymentCard);
         return paymentCardMapper.toDto(paymentCard);
     }
 }

@@ -34,6 +34,7 @@ public class DeActivateService {
         }
 
         paymentCard.setActive(true);
+        paymentCardRepository.save(paymentCard);
         return paymentCardMapper.toDto(paymentCard);
     }
     public ResponsePaymentCardDto deactivatePaymentCard(Long cardId){
@@ -48,6 +49,7 @@ public class DeActivateService {
         }
 
         paymentCard.setActive(false);
+        paymentCardRepository.save(paymentCard);
         return paymentCardMapper.toDto(paymentCard);
     }
 
@@ -63,6 +65,7 @@ public class DeActivateService {
         }
 
         user.setActive(true);
+        userRepository.save(user);
         return userMapper.toDto(user);
     }
 
@@ -78,6 +81,7 @@ public class DeActivateService {
         }
 
         user.setActive(false);
+        userRepository.save(user);
         return userMapper.toDto(user);
     }
 
