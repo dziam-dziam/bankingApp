@@ -10,12 +10,15 @@ import innowise.bankingApp.Mappers.PaymentCardMapper;
 import innowise.bankingApp.Mappers.UserMapper;
 import innowise.bankingApp.Repositories.PaymentCardRepository;
 import innowise.bankingApp.Repositories.UserRepository;
+import innowise.bankingApp.Specifications.PaymentCardSpecifications;
+import innowise.bankingApp.Specifications.UserSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,21 +51,22 @@ public class GetService{
         return paymentCardMapper.toDto(paymentCard);
     }
 
-    public List<ResponseUserDto> getAllUsers(){
-        List<ResponseUserDto> returnList = new ArrayList<>();
-        List<User> allUsers = userRepository.findAll();
-        for (User user : allUsers){
-            returnList.add(userMapper.toDto(user));
-        }
-        return returnList;
+    @Transactional(readOnly = true)
+    public Page<ResponseUserDto> getAllUsers(String name, String surname, Pageable pageable){
+        return userRepository.findAll(
+                UserSpecifications.filter(name, surname), pageable).map(userMapper::toDto);
     }
 
-    public List<ResponsePaymentCardDto> getAllPaymentCards(){
-        List<ResponsePaymentCardDto> returnList = new ArrayList<>();
-        List<PaymentCard> allPaymentCards = paymentCardRepository.findAll();
-        for (PaymentCard paymentCard : allPaymentCards){
-            returnList.add(paymentCardMapper.toDto(paymentCard));
+    @Transactional(readOnly = true)
+    public Page<ResponsePaymentCardDto> getAllPaymentCards(String name, String surname, Pageable pageable){
+        return paymentCardRepository.findAll(
+                PaymentCardSpecifications.filter(name, surname), pageable).map(paymentCardMapper::toDto);
+    }
+
+    public List<ResponsePaymentCardDto> getAllPaymentCardsByUserId(Long userId){
+        if (userId == null){
+            throw new IllegalArgumentException("User id cannot be null");
         }
-        return returnList;
+        return paymentCardRepository.getAllPaymentCardsByUserId(userId);
     }
 }
