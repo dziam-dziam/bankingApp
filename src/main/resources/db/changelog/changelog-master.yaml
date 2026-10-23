@@ -1,13 +1,4 @@
 databaseChangeLog:
   - include:
-      file: changes/000.00.01/changelog-JAC-2-create-users.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: changes/000.00.02/changelog-JAC-2-create-payment-cards.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: changes/000.00.03/changelog-JAC-2-create-indexes.yaml
-      relativeToChangelogFile: true
-  - include:
-      file: changes/000.00.04/changelog-JAC-2-add-users-email-unique.yaml
+      file: changes/000.00.01/changelog-JAC-2-init-schema.yaml
       relativeToChangelogFile: true

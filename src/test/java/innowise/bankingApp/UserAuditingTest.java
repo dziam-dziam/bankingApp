@@ -1,5 +1,7 @@
 package innowise.bankingApp;
 
+import innowise.bankingApp.model.entities.PaymentCard;
+import innowise.bankingApp.model.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -155,7 +157,7 @@ class UserAuditingTest {
 
     private PaymentCard newCard(User user, String number) {
         PaymentCard card = new PaymentCard();
-        card.setUser(user);
+        user.addCard(card);
         card.setNumber(number);
         card.setHolder("Jan Kowalski");
         card.setExpirationDate(LocalDate.of(2030, 12, 31));
