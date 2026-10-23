@@ -45,7 +45,7 @@ public class GetService {
             throw new IllegalArgumentException("PaymentCardId cannot be null");
         }
 
-        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).
+        PaymentCard paymentCard = paymentCardRepository.findByIdNative(paymentCardId).
                 orElseThrow(() -> new PaymentCardNotFoundByIdException(paymentCardId));
 
         return paymentCardMapper.toDto(paymentCard);
@@ -63,6 +63,7 @@ public class GetService {
                 PaymentCardSpecifications.filter(name, surname), pageable).map(paymentCardMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
     public List<ResponsePaymentCardDto> getAllPaymentCardsByUserId(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("User id cannot be null");

@@ -157,7 +157,7 @@ class UserAuditingTest {
 
     private PaymentCard newCard(User user, String number) {
         PaymentCard card = new PaymentCard();
-        card.setUser(user);
+        user.addCard(card);
         card.setNumber(number);
         card.setHolder("Jan Kowalski");
         card.setExpirationDate(LocalDate.of(2030, 12, 31));

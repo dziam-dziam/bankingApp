@@ -59,6 +59,7 @@ public class UpdateService {
         PaymentCard paymentCard = paymentCardRepository.findById(cardId)
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
 
+        paymentCard.setNumber(updateDto.number());
         paymentCard.setHolder(updateDto.holder());
         paymentCard.setExpirationDate(updateDto.expirationDate());
 
