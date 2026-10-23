@@ -1,8 +1,0 @@
-databaseChangeLog:
-   - changeSet:
-      id: JAC-2-add-users-email-unique
-      author: damian
-      changes:
-        - sqlFile:
-            path: add-users-email-unique.sql
-            relativeToChangelogFile: true

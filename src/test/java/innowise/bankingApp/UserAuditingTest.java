@@ -1,7 +1,7 @@
 package innowise.bankingApp;
 
-import innowise.bankingApp.Entities.PaymentCard;
-import innowise.bankingApp.Entities.User;
+import innowise.bankingApp.model.entities.PaymentCard;
+import innowise.bankingApp.model.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
