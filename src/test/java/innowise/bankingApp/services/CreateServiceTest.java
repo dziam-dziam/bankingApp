@@ -2,6 +2,7 @@ package innowise.bankingApp.services;
 
 import innowise.bankingApp.mappers.PaymentCardMapper;
 import innowise.bankingApp.mappers.UserMapper;
+import innowise.bankingApp.model.dtos.CreateDtos.CreatePaymentCardDto;
 import innowise.bankingApp.model.dtos.CreateDtos.CreateUserDto;
 import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
 import innowise.bankingApp.model.entities.User;
@@ -40,7 +41,7 @@ class CreateServiceTest {
     private CreateService createService;
 
     @Test
-    void should_create_new_user(){
+    void shouldCreateNewUser(){
         //given
         CreateUserDto dto = new CreateUserDto(
                 "Jan",
@@ -80,9 +81,4 @@ class CreateServiceTest {
         verifyNoInteractions(userRepository, paymentCardRepository,
                 userMapper, paymentCardMapper);
     }
-
-
-
-
-
 }

@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select u from User u where u.id = :id")
+    @Query("select user from User user where user.id = :id")
     Optional<User> findByIdForUpdate(@Param("id") Long id);
 }
