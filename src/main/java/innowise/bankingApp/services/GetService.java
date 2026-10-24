@@ -58,9 +58,9 @@ public class GetService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ResponsePaymentCardDto> getAllPaymentCards(String name, String surname, Pageable pageable) {
+    public Page<ResponsePaymentCardDto> getAllPaymentCards(String holderName, String holderSurname, Pageable pageable) {
         return paymentCardRepository.findAll(
-                PaymentCardSpecifications.filter(name, surname), pageable).map(paymentCardMapper::toDto);
+                PaymentCardSpecifications.filter(holderName, holderSurname), pageable).map(paymentCardMapper::toDto);
     }
 
     @Transactional(readOnly = true)
