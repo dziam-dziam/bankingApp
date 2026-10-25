@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface PaymentCardRepository extends JpaRepository<PaymentCard, Long>, JpaSpecificationExecutor<PaymentCard> {
 
-    List<ResponsePaymentCardDto> getAllPaymentCardsByUserId(Long userId);
+    List<PaymentCard> getAllPaymentCardsByUserId(Long userId);
 
     @Query(value = "SELECT * FROM payment_cards WHERE id = :id", nativeQuery = true)
     Optional<PaymentCard> findByIdNative(@Param("id") Long id);

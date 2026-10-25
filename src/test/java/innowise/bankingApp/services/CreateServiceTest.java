@@ -2,8 +2,11 @@ package innowise.bankingApp.services;
 
 import innowise.bankingApp.mappers.PaymentCardMapper;
 import innowise.bankingApp.mappers.UserMapper;
+import innowise.bankingApp.model.dtos.CreateDtos.CreatePaymentCardDto;
 import innowise.bankingApp.model.dtos.CreateDtos.CreateUserDto;
+import innowise.bankingApp.model.dtos.ResponseDtos.ResponsePaymentCardDto;
 import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
+import innowise.bankingApp.model.entities.PaymentCard;
 import innowise.bankingApp.model.entities.User;
 import innowise.bankingApp.repositories.PaymentCardRepository;
 import innowise.bankingApp.repositories.UserRepository;
@@ -21,8 +24,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CreateServiceTest {
 
-    private static final LocalDate BIRTH_DATE = LocalDate.of(2002,9,27);
-    private static final LocalDate EXPIRATION_DATE = LocalDate.of(2030, 12,12);
+    private static final LocalDate BIRTH_DATE = LocalDate.of(2002, 9, 27);
+    private static final LocalDate EXPIRATION_DATE = LocalDate.of(2030, 12, 12);
 
     @Mock
     private UserMapper userMapper;
@@ -40,7 +43,7 @@ class CreateServiceTest {
     private CreateService createService;
 
     @Test
-    void should_create_new_user(){
+    void shouldCreateNewUser() {
         //given
         CreateUserDto dto = new CreateUserDto(
                 "Jan",
@@ -81,8 +84,34 @@ class CreateServiceTest {
                 userMapper, paymentCardMapper);
     }
 
+    @Test
+    void shouldCreateNewPaymentCard() {
+        //given
+        CreatePaymentCardDto createDto = new CreatePaymentCardDto(
+                1L, "123456", "Jan Kowalski", EXPIRATION_DATE
+        );
+        PaymentCard paymentCard = new PaymentCard();
+        ResponsePaymentCardDto expectedResponse = new ResponsePaymentCardDto(
+                1L,
+                1L,
+                "123456",
+                "Jan Kowalski",
+                EXPIRATION_DATE,
+                true
+        );
+        User user = new User();
+        //when
+        ResponsePaymentCardDto result = createService.createNewPaymentCard(createDto);
+        when(paymentCardMapper.toEntity(createDto)).thenReturn(paymentCard);
+        when(paymentCardMapper.toDto(paymentCard)).thenReturn(expectedResponse);
+
+        //then
+        assertEquals(expectedResponse, result);
+        assertTrue(paymentCard.isActive());
+        verify(paymentCardRepository).save(paymentCard);
+        verify(paymentCardMapper).toDto(paymentCard);
+        verify(paymentCardMapper).toEntity(createDto);
 
 
-
-
+    }
 }
