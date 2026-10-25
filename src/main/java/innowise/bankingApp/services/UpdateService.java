@@ -37,14 +37,10 @@ public class UpdateService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
 
-        user.setName(updateUserDto.name());
-        user.setSurname(updateUserDto.surname());
-        user.setEmail(updateUserDto.email());
-        user.setBirthDate(updateUserDto.birthDate());
+        User updatedUser = userMapper.updateEntity(updateUserDto, user);
+        User savedUser = userRepository.save(updatedUser);
 
-        userRepository.save(user);
-
-        return userMapper.toDto(user);
+        return userMapper.toDto(savedUser);
     }
 
     @Transactional
@@ -59,11 +55,9 @@ public class UpdateService {
         PaymentCard paymentCard = paymentCardRepository.findById(cardId)
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
 
-        paymentCard.setNumber(updateDto.number());
-        paymentCard.setHolder(updateDto.holder());
-        paymentCard.setExpirationDate(updateDto.expirationDate());
+        PaymentCard updatedCard = paymentCardMapper.updateEntity(updateDto, paymentCard);
+        PaymentCard savedCard = paymentCardRepository.save(updatedCard);
 
-        paymentCardRepository.save(paymentCard);
-        return paymentCardMapper.toDto(paymentCard);
+        return paymentCardMapper.toDto(savedCard);
     }
 }

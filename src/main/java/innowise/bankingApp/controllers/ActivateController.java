@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bank/activate")
+@RequestMapping("/activate")
 public class ActivateController {
 
     private final DeActivateService deActivateService;
 
-    @PutMapping("/paymentCard/{id}")
+    @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> activatePaymentCard(
             @PathVariable Long cardId
     ){
         return ResponseEntity.ok(deActivateService.activatePaymentCard(cardId));
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("user/{userId}")
     public ResponseEntity<ResponseUserDto> activateUser(
             @PathVariable Long userId
     ){

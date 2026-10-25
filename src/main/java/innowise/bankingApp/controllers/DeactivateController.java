@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bank/deactivate")
+@RequestMapping("/deactivate")
 public class DeactivateController {
 
     private final DeActivateService deActivateService;
 
-    @PutMapping("/paymentCard/{id}")
+    @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> deactivatePaymentCard(
             @PathVariable Long cardId
     ){
         return ResponseEntity.ok(deActivateService.deactivatePaymentCard(cardId));
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("user/{userId}")
     public ResponseEntity<ResponseUserDto> deactivateUser(
             @PathVariable Long userId
     ){

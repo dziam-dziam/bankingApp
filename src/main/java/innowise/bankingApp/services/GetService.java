@@ -68,6 +68,8 @@ public class GetService {
         if (userId == null) {
             throw new IllegalArgumentException("User id cannot be null");
         }
-        return paymentCardRepository.getAllPaymentCardsByUserId(userId);
+
+        List<PaymentCard> paymentCards = paymentCardRepository.getAllPaymentCardsByUserId(userId);
+        return paymentCards.stream().map(paymentCardMapper::toDto).toList();
     }
 }
