@@ -13,17 +13,17 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("bank/get")
+@RequestMapping("/get")
 public class GetController {
 
     private final GetService getService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<ResponseUserDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(getService.getUser(id));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/paymentCard/{id}")
     public ResponseEntity<ResponsePaymentCardDto> getPaymentCardDto(@PathVariable Long id) {
         return ResponseEntity.ok(getService.getPaymentCard(id));
     }

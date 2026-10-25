@@ -11,20 +11,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/bank/update")
+@RequestMapping("/update")
 @RequiredArgsConstructor
 public class UpdateController {
 
     private final UpdateService updateService;
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/{id}")
     public ResponseEntity<ResponseUserDto> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserDto updateUserDto){
         return ResponseEntity.ok(updateService.updateUser(userId,updateUserDto));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/paymentCard/{id}")
     public ResponseEntity<ResponsePaymentCardDto> updatePaymentCard(
             @PathVariable Long paymentCardId,
             @Valid @RequestBody UpdatePaymentCardDto updatePaymentCardDto){
