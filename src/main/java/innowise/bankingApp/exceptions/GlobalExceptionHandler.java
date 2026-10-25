@@ -22,4 +22,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.CONFLICT, exception.getMessage()
         );
     }
+
+    @ExceptionHandler({PaymentCardAlreadyActiveException.class})
+    public ProblemDetail handleAlreadyActiveCard(RuntimeException exception){
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler({PaymentCardAlreadyDeactivatedException.class})
+    public ProblemDetail handleAlreadyDeactivatedCard(RuntimeException exception){
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, exception.getMessage()
+        );
+    }
+    @ExceptionHandler({UserAlreadyActiveException.class})
+    public ProblemDetail handleAlreadyActiveUser(RuntimeException exception){
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, exception.getMessage()
+        );
+    }
+    @ExceptionHandler({UserAlreadyDeactivatedException.class})
+    public ProblemDetail handleAlreadyDeactivatedUser(RuntimeException exception){
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, exception.getMessage()
+        );
+    }
 }

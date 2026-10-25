@@ -1,11 +1,10 @@
 package innowise.bankingApp.services;
 
+import innowise.bankingApp.exceptions.*;
 import innowise.bankingApp.model.dtos.ResponseDtos.ResponsePaymentCardDto;
 import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
 import innowise.bankingApp.model.entities.PaymentCard;
 import innowise.bankingApp.model.entities.User;
-import innowise.bankingApp.exceptions.PaymentCardNotFoundByIdException;
-import innowise.bankingApp.exceptions.UserNotFoundByIdException;
 import innowise.bankingApp.mappers.PaymentCardMapper;
 import innowise.bankingApp.mappers.UserMapper;
 import innowise.bankingApp.repositories.PaymentCardRepository;
@@ -30,7 +29,7 @@ public class DeActivateService {
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
 
         if (paymentCard.isActive()) {
-            throw new IllegalStateException("Payment card is already active");
+            throw new PaymentCardAlreadyActiveException();
         }
 
         paymentCard.setActive(true);
@@ -46,7 +45,7 @@ public class DeActivateService {
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
 
         if (!paymentCard.isActive()) {
-            throw new IllegalStateException("Payment card is already deactivated");
+            throw new PaymentCardAlreadyDeactivatedException();
         }
 
         paymentCard.setActive(false);
@@ -62,7 +61,7 @@ public class DeActivateService {
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
 
         if (user.isActive()) {
-            throw new IllegalStateException("User is already active");
+            throw new UserAlreadyActiveException();
         }
 
         user.setActive(true);
@@ -78,7 +77,7 @@ public class DeActivateService {
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
 
         if (!user.isActive()) {
-            throw new IllegalStateException("User is already deactivated");
+            throw new UserAlreadyDeactivatedException();
         }
 
         user.setActive(false);
