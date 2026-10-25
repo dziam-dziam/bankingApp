@@ -37,12 +37,12 @@ public class CreateService {
     }
 
     @Transactional
-    public ResponsePaymentCardDto createNewPaymentCard(CreatePaymentCardDto dto) {
-        if (dto == null) {
+    public ResponsePaymentCardDto createNewPaymentCard(CreatePaymentCardDto createDto) {
+        if (createDto == null) {
             throw new IllegalArgumentException("Dto cannot be null");
         }
 
-        Long userId = dto.userId();
+        Long userId = createDto.userId();
 
         if (userId == null) {
             throw new IllegalArgumentException("User id cannot be null");
@@ -51,7 +51,7 @@ public class CreateService {
         User user = userRepository.findByIdForUpdate(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
 
-        PaymentCard newPaymentCard = paymentCardMapper.toEntity(dto);
+        PaymentCard newPaymentCard = paymentCardMapper.toEntity(createDto);
         newPaymentCard.setActive(true);
         user.addCard(newPaymentCard);
         PaymentCard savedCard = paymentCardRepository.save(newPaymentCard);
