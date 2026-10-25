@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -100,10 +101,11 @@ class CreateServiceTest {
                 true
         );
         User user = new User();
-        //when
-        ResponsePaymentCardDto result = createService.createNewPaymentCard(createDto);
         when(paymentCardMapper.toEntity(createDto)).thenReturn(paymentCard);
-        when(paymentCardMapper.toDto(paymentCard)).thenReturn(expectedResponse);
+        when(userRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(user));
+        //when
+
+        ResponsePaymentCardDto result = createService.createNewPaymentCard(createDto);
 
         //then
         assertEquals(expectedResponse, result);
