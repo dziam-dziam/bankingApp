@@ -11,41 +11,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({UserNotFoundByIdException.class, PaymentCardNotFoundByIdException.class})
     public ProblemDetail handleNotFound(RuntimeException exception) {
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND, exception.getMessage()
-        );
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
-    @ExceptionHandler({TooManyPaymentCardsException.class})
+    @ExceptionHandler({
+            TooManyPaymentCardsException.class,
+            PaymentCardAlreadyActiveException.class,
+            PaymentCardAlreadyDeactivatedException.class,
+            UserAlreadyActiveException.class,
+            UserAlreadyDeactivatedException.class
+    })
     public ProblemDetail handleConflict(RuntimeException exception) {
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, exception.getMessage()
-        );
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
     }
 
-    @ExceptionHandler({PaymentCardAlreadyActiveException.class})
-    public ProblemDetail handleAlreadyActiveCard(RuntimeException exception){
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, exception.getMessage()
-        );
-    }
-
-    @ExceptionHandler({PaymentCardAlreadyDeactivatedException.class})
-    public ProblemDetail handleAlreadyDeactivatedCard(RuntimeException exception){
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, exception.getMessage()
-        );
-    }
-    @ExceptionHandler({UserAlreadyActiveException.class})
-    public ProblemDetail handleAlreadyActiveUser(RuntimeException exception){
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, exception.getMessage()
-        );
-    }
-    @ExceptionHandler({UserAlreadyDeactivatedException.class})
-    public ProblemDetail handleAlreadyDeactivatedUser(RuntimeException exception){
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, exception.getMessage()
-        );
-    }
 }

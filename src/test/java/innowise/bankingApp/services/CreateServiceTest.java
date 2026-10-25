@@ -1,5 +1,7 @@
 package innowise.bankingApp.services;
 
+import innowise.bankingApp.exceptions.TooManyPaymentCardsException;
+import innowise.bankingApp.exceptions.UserNotFoundByIdException;
 import innowise.bankingApp.mappers.PaymentCardMapper;
 import innowise.bankingApp.mappers.UserMapper;
 import innowise.bankingApp.model.dtos.CreateDtos.CreatePaymentCardDto;
@@ -87,11 +89,17 @@ class CreateServiceTest {
 
     @Test
     void shouldCreateNewPaymentCard() {
-        //given
+        // given
         CreatePaymentCardDto createDto = new CreatePaymentCardDto(
-                1L, "123456", "Jan Kowalski", EXPIRATION_DATE
+                1L,
+                "123456",
+                "Jan Kowalski",
+                EXPIRATION_DATE
         );
+
         PaymentCard paymentCard = new PaymentCard();
+        User user = new User();
+
         ResponsePaymentCardDto expectedResponse = new ResponsePaymentCardDto(
                 1L,
                 1L,
@@ -100,20 +108,126 @@ class CreateServiceTest {
                 EXPIRATION_DATE,
                 true
         );
-        User user = new User();
+
         when(paymentCardMapper.toEntity(createDto)).thenReturn(paymentCard);
         when(userRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(user));
-        //when
+        when(paymentCardMapper.toDto(paymentCard)).thenReturn(expectedResponse);
+        when(paymentCardRepository.save(paymentCard)).thenReturn(paymentCard);
 
-        ResponsePaymentCardDto result = createService.createNewPaymentCard(createDto);
+        // when
+        ResponsePaymentCardDto result =
+                createService.createNewPaymentCard(createDto);
 
-        //then
+        // then
         assertEquals(expectedResponse, result);
         assertTrue(paymentCard.isActive());
+        assertSame(user, paymentCard.getUser());
+
         verify(paymentCardRepository).save(paymentCard);
-        verify(paymentCardMapper).toDto(paymentCard);
         verify(paymentCardMapper).toEntity(createDto);
-
-
+        verify(paymentCardMapper).toDto(paymentCard);
+        verify(userRepository).findByIdForUpdate(1L);
     }
+
+
+    @Test
+    void shouldRejectNullPaymentCardDto() {
+        // when / then
+        assertThrows(IllegalArgumentException.class, () -> createService.createNewPaymentCard(null)
+        );
+
+        verifyNoInteractions(
+                userRepository,
+                paymentCardRepository,
+                userMapper,
+                paymentCardMapper
+        );
+    }
+
+    @Test
+    void shouldRejectNullUserId() {
+        // given
+        CreatePaymentCardDto dto = new CreatePaymentCardDto(
+                null,
+                "123456",
+                "Jan Kowalski",
+                EXPIRATION_DATE
+        );
+
+        // when / then
+        assertThrows(IllegalArgumentException.class, () -> createService.createNewPaymentCard(dto)
+        );
+
+        verifyNoInteractions(
+                userRepository,
+                paymentCardRepository,
+                userMapper,
+                paymentCardMapper
+        );
+    }
+
+    @Test
+    void shouldRejectPaymentCardForNonExistingUser() {
+        // given
+        CreatePaymentCardDto dto = new CreatePaymentCardDto(
+                999L,
+                "123456",
+                "Jan Kowalski",
+                EXPIRATION_DATE
+        );
+
+        when(userRepository.findByIdForUpdate(999L)).thenReturn(Optional.empty());
+
+        // when / then
+        assertThrows(UserNotFoundByIdException.class, () -> createService.createNewPaymentCard(dto)
+        );
+
+        verify(userRepository).findByIdForUpdate(999L);
+        verifyNoInteractions(
+                paymentCardRepository,
+                paymentCardMapper
+        );
+    }
+
+    @Test
+    void shouldRejectSixthPaymentCard() {
+        // given
+        User user = new User();
+
+        for (int i = 0; i < 5; i++) {
+            user.addCard(new PaymentCard());
+        }
+
+        PaymentCard newCard = new PaymentCard();
+
+        CreatePaymentCardDto dto = new CreatePaymentCardDto(
+                1L,
+                "123456",
+                "Jan Kowalski",
+                EXPIRATION_DATE
+        );
+
+        when(userRepository.findByIdForUpdate(1L))
+                .thenReturn(Optional.of(user));
+
+        when(paymentCardMapper.toEntity(dto))
+                .thenReturn(newCard);
+
+        // when / then
+        assertThrows(TooManyPaymentCardsException.class, () -> createService.createNewPaymentCard(dto)
+        );
+
+        assertEquals(5, user.getPaymentCards().size());
+        assertNull(newCard.getUser());
+
+        verify(userRepository).findByIdForUpdate(1L);
+        verify(paymentCardMapper).toEntity(dto);
+
+        verify(paymentCardRepository, never())
+                .save(any(PaymentCard.class));
+
+        verify(paymentCardMapper, never())
+                .toDto(any(PaymentCard.class));
+    }
+
 }

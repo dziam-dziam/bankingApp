@@ -11,6 +11,7 @@ import innowise.bankingApp.repositories.PaymentCardRepository;
 import innowise.bankingApp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class DeActivateService {
     private final PaymentCardRepository paymentCardRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ResponsePaymentCardDto activatePaymentCard(Long cardId) {
         if (cardId == null) {
             throw new IllegalArgumentException("Id cannot be null");
@@ -33,10 +35,10 @@ public class DeActivateService {
         }
 
         paymentCard.setActive(true);
-        paymentCardRepository.save(paymentCard);
         return paymentCardMapper.toDto(paymentCard);
     }
 
+    @Transactional
     public ResponsePaymentCardDto deactivatePaymentCard(Long cardId) {
         if (cardId == null) {
             throw new IllegalArgumentException("Id cannot be null");
@@ -49,10 +51,10 @@ public class DeActivateService {
         }
 
         paymentCard.setActive(false);
-        paymentCardRepository.save(paymentCard);
         return paymentCardMapper.toDto(paymentCard);
     }
 
+    @Transactional
     public ResponseUserDto activateUser(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("Id cannot be null");
@@ -65,13 +67,13 @@ public class DeActivateService {
         }
 
         user.setActive(true);
-        userRepository.save(user);
         return userMapper.toDto(user);
     }
 
+    @Transactional
     public ResponseUserDto deactivateUser(Long userId) {
         if (userId == null) {
-            throw new IllegalStateException("Id cannot be null");
+            throw new IllegalArgumentException("Id cannot be null");
         }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
@@ -81,7 +83,6 @@ public class DeActivateService {
         }
 
         user.setActive(false);
-        userRepository.save(user);
         return userMapper.toDto(user);
     }
 
