@@ -17,17 +17,17 @@ public class UpdateController {
 
     private final UpdateService updateService;
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/user/{userId}")
     public ResponseEntity<ResponseUserDto> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserDto updateUserDto){
         return ResponseEntity.ok(updateService.updateUser(userId,updateUserDto));
     }
 
-    @PutMapping("/paymentCard/{id}")
+    @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> updatePaymentCard(
-            @PathVariable Long paymentCardId,
+            @PathVariable Long cardId,
             @Valid @RequestBody UpdatePaymentCardDto updatePaymentCardDto){
-        return ResponseEntity.ok(updateService.updatePaymentCard(paymentCardId,updatePaymentCardDto));
+        return ResponseEntity.ok(updateService.updatePaymentCard(cardId,updatePaymentCardDto));
     }
 }

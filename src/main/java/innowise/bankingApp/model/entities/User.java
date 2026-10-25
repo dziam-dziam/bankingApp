@@ -4,8 +4,7 @@ import innowise.bankingApp.AuditableEntity;
 import innowise.bankingApp.exceptions.TooManyPaymentCardsException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

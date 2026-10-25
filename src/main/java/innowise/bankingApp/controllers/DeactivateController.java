@@ -6,6 +6,7 @@ import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
 import innowise.bankingApp.services.DeActivateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class DeactivateController {
 
     private final DeActivateService deActivateService;
 
+    @Transactional
     @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> deactivatePaymentCard(
             @PathVariable Long cardId
@@ -25,6 +27,7 @@ public class DeactivateController {
         return ResponseEntity.ok(deActivateService.deactivatePaymentCard(cardId));
     }
 
+    @Transactional
     @PutMapping("user/{userId}")
     public ResponseEntity<ResponseUserDto> deactivateUser(
             @PathVariable Long userId
