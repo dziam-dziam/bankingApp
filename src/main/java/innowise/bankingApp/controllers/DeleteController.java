@@ -1,7 +1,6 @@
 package innowise.bankingApp.controllers;
 
-import innowise.bankingApp.repositories.PaymentCardRepository;
-import innowise.bankingApp.repositories.UserRepository;
+import innowise.bankingApp.services.DeleteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,25 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DeleteController {
 
-    private final PaymentCardRepository paymentCardRepository;
-    private final UserRepository userRepository;
+    private final DeleteService deleteService;
 
     @DeleteMapping("user/{userId}")
     public void deleteUser(@PathVariable Long userId){
-        userRepository.deleteById(userId);
+        deleteService.deleteUser(userId);
     }
     @DeleteMapping("paymentCard/{cardId}")
     public void deleteCard(@PathVariable Long cardId){
-        paymentCardRepository.deleteById(cardId);
+        deleteService.deletePaymentCard(cardId);
     }
 
     @DeleteMapping("/allCards")
     public void deleteAllCards(){
-        paymentCardRepository.deleteAll();
+        deleteService.deleteAllPaymentCards();
     }
 
     @DeleteMapping("/allUsers")
     public void deleteAllUsers(){
-        userRepository.deleteAll();
+        deleteService.deleteAllUsers();
     }
 }

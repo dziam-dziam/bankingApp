@@ -23,7 +23,7 @@ public class DeActivateService {
 
     public ResponsePaymentCardDto activatePaymentCard(Long cardId) {
         if (cardId == null) {
-            throw new IllegalStateException("Id cannot be null");
+            throw new IllegalArgumentException("Id cannot be null");
         }
         PaymentCard paymentCard = paymentCardRepository.findById(cardId)
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
@@ -39,7 +39,7 @@ public class DeActivateService {
 
     public ResponsePaymentCardDto deactivatePaymentCard(Long cardId) {
         if (cardId == null) {
-            throw new IllegalStateException("Id cannot be null");
+            throw new IllegalArgumentException("Id cannot be null");
         }
         PaymentCard paymentCard = paymentCardRepository.findById(cardId)
                 .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
@@ -55,7 +55,7 @@ public class DeActivateService {
 
     public ResponseUserDto activateUser(Long userId) {
         if (userId == null) {
-            throw new IllegalStateException("Id cannot be null");
+            throw new IllegalArgumentException("Id cannot be null");
         }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundByIdException(userId));
