@@ -2,7 +2,7 @@ package innowise.bankingApp.services;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.mappers.UserMapper;
-import innowise.bankingApp.model.dto.create.CreateUserDto;
+import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.entity.User;
 import innowise.bankingApp.repositories.UserRepository;

@@ -6,9 +6,9 @@ import innowise.bankingApp.exceptions.PaymentCardAlreadyDeactivatedException;
 import innowise.bankingApp.exceptions.PaymentCardNotFoundByIdException;
 import innowise.bankingApp.exceptions.UserNotFoundByIdException;
 import innowise.bankingApp.mappers.PaymentCardMapper;
-import innowise.bankingApp.model.dto.create.CreatePaymentCardDto;
+import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
-import innowise.bankingApp.model.dto.update.UpdatePaymentCardDto;
+import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.entity.PaymentCard;
 import innowise.bankingApp.model.entity.User;
 import innowise.bankingApp.repositories.PaymentCardRepository;
@@ -57,7 +57,7 @@ public class CardService {
             throw new IllegalArgumentException(ErrorCode.CARD_ID_REQUIRED.formatMessage());
         }
 
-        PaymentCard paymentCard = paymentCardRepository.findByIdNative(paymentCardId).orElseThrow(() -> new PaymentCardNotFoundByIdException(paymentCardId));
+        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new PaymentCardNotFoundByIdException(paymentCardId));
 
         return paymentCardMapper.toDto(paymentCard);
     }

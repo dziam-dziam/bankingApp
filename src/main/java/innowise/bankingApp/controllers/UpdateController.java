@@ -2,8 +2,8 @@ package innowise.bankingApp.controllers;
 
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
-import innowise.bankingApp.model.dto.update.UpdatePaymentCardDto;
-import innowise.bankingApp.model.dto.update.UpdateUserDto;
+import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
+import innowise.bankingApp.model.dto.request.UpdateUserDto;
 import innowise.bankingApp.services.CardService;
 import innowise.bankingApp.services.UserService;
 import jakarta.validation.Valid;

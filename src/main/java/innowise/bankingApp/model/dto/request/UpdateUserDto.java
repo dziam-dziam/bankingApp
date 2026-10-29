@@ -1,14 +1,19 @@
-package innowise.bankingApp.model.dto.create;
+package innowise.bankingApp.model.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
 
-public record CreateUserDto(
+public record UpdateUserDto(
+        @NotNull(message = "User Id cannot be null")
+        @Positive(message = "User Id cannot be negative number")
+        Long id,
+
         @NotBlank(message = "Name cannot be empty")
         @Size(min = 1, max = 30, message = "Name has to be between 1 and 30 characters")
         String name,
@@ -23,6 +28,6 @@ public record CreateUserDto(
 
         @Email
         @NotBlank(message = "Email cannot be empty")
-        String email
-) {
+        String email) {
+
 }

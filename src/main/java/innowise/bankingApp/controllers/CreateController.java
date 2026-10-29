@@ -1,7 +1,7 @@
 package innowise.bankingApp.controllers;
 
-import innowise.bankingApp.model.dto.create.CreatePaymentCardDto;
-import innowise.bankingApp.model.dto.create.CreateUserDto;
+import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
+import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.services.CardService;
