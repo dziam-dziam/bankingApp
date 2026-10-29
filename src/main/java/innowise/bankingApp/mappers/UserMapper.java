@@ -1,9 +1,9 @@
 package innowise.bankingApp.mappers;
 
-import innowise.bankingApp.model.dtos.CreateDtos.CreateUserDto;
-import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
-import innowise.bankingApp.model.dtos.UpdateDtos.UpdateUserDto;
-import innowise.bankingApp.model.entities.User;
+import innowise.bankingApp.model.dto.request.CreateUserDto;
+import innowise.bankingApp.model.dto.response.ResponseUserDto;
+import innowise.bankingApp.model.dto.request.UpdateUserDto;
+import innowise.bankingApp.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

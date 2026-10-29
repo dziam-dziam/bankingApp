@@ -1,4 +1,4 @@
-package innowise.bankingApp;
+package innowise.bankingApp.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

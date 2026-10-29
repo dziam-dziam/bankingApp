@@ -1,10 +1,11 @@
 package innowise.bankingApp.controllers;
 
-import innowise.bankingApp.model.dtos.CreateDtos.CreatePaymentCardDto;
-import innowise.bankingApp.model.dtos.CreateDtos.CreateUserDto;
-import innowise.bankingApp.model.dtos.ResponseDtos.ResponsePaymentCardDto;
-import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
-import innowise.bankingApp.services.CreateService;
+import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
+import innowise.bankingApp.model.dto.request.CreateUserDto;
+import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
+import innowise.bankingApp.model.dto.response.ResponseUserDto;
+import innowise.bankingApp.services.CardService;
+import innowise.bankingApp.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/create")
 public class CreateController {
-    private final CreateService createService;
+
+    private final UserService userService;
+    private final CardService cardService;
 
     @PostMapping("/newUser")
-    public ResponseEntity<ResponseUserDto> createNewUser(
-            @Valid @RequestBody CreateUserDto createUserDto
-    ){
-        return ResponseEntity.ok(createService.createNewUser(createUserDto));
+    public ResponseEntity<ResponseUserDto> createNewUser(@Valid @RequestBody CreateUserDto createUserDto) {
+        return ResponseEntity.ok(userService.createNewUser(createUserDto));
     }
 
     @PostMapping("/newPaymentCard")
-    public ResponseEntity<ResponsePaymentCardDto> createNewPaymentCard(
-            @Valid @RequestBody CreatePaymentCardDto createPaymentCardDto
-    ){
-        return ResponseEntity.ok(createService.createNewPaymentCard(createPaymentCardDto));
+    public ResponseEntity<ResponsePaymentCardDto> createNewPaymentCard(@Valid @RequestBody CreatePaymentCardDto createPaymentCardDto) {
+        return ResponseEntity.ok(cardService.createNewPaymentCard(createPaymentCardDto));
     }
-
 }

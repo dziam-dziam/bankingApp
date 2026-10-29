@@ -1,6 +1,6 @@
 package innowise.bankingApp.specifications;
 
-import innowise.bankingApp.model.entities.PaymentCard;
+import innowise.bankingApp.model.entity.PaymentCard;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

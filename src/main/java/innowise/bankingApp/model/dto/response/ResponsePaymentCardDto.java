@@ -1,4 +1,4 @@
-package innowise.bankingApp.model.dtos.ResponseDtos;
+package innowise.bankingApp.model.dto.response;
 
 import java.time.LocalDate;
 
