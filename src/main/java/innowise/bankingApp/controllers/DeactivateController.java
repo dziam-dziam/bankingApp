@@ -23,7 +23,7 @@ public class DeactivateController {
     @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> deactivatePaymentCard(
             @PathVariable Long cardId
-    ){
+    ) {
         return ResponseEntity.ok(deActivateService.deactivatePaymentCard(cardId));
     }
 
@@ -31,7 +31,7 @@ public class DeactivateController {
     @PutMapping("user/{userId}")
     public ResponseEntity<ResponseUserDto> deactivateUser(
             @PathVariable Long userId
-    ){
+    ) {
         return ResponseEntity.ok(deActivateService.deactivateUser(userId));
     }
 }

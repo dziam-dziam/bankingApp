@@ -7,6 +7,7 @@ import innowise.bankingApp.model.dtos.ResponseDtos.ResponseUserDto;
 import innowise.bankingApp.services.CreateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,15 +23,18 @@ public class CreateController {
     @PostMapping("/newUser")
     public ResponseEntity<ResponseUserDto> createNewUser(
             @Valid @RequestBody CreateUserDto createUserDto
-    ){
-        return ResponseEntity.ok(createService.createNewUser(createUserDto));
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(createService.createNewUser(createUserDto));
     }
 
     @PostMapping("/newPaymentCard")
     public ResponseEntity<ResponsePaymentCardDto> createNewPaymentCard(
             @Valid @RequestBody CreatePaymentCardDto createPaymentCardDto
-    ){
-        return ResponseEntity.ok(createService.createNewPaymentCard(createPaymentCardDto));
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(createService.createNewPaymentCard(createPaymentCardDto));
     }
 
 }

@@ -21,14 +21,14 @@ public class ActivateController {
     @PutMapping("/paymentCard/{cardId}")
     public ResponseEntity<ResponsePaymentCardDto> activatePaymentCard(
             @PathVariable Long cardId
-    ){
+    ) {
         return ResponseEntity.ok(deActivateService.activatePaymentCard(cardId));
     }
 
     @PutMapping("user/{userId}")
     public ResponseEntity<ResponseUserDto> activateUser(
             @PathVariable Long userId
-    ){
+    ) {
         return ResponseEntity.ok(deActivateService.activateUser(userId));
     }
 }
