@@ -1,13 +1,10 @@
 package innowise.bankingApp.mappers;
 
-import innowise.bankingApp.model.dtos.CreateDtos.CreatePaymentCardDto;
-import innowise.bankingApp.model.dtos.ResponseDtos.ResponsePaymentCardDto;
-import innowise.bankingApp.model.dtos.UpdateDtos.UpdatePaymentCardDto;
-import innowise.bankingApp.model.entities.PaymentCard;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.ReportingPolicy;
+import innowise.bankingApp.model.dto.create.CreatePaymentCardDto;
+import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
+import innowise.bankingApp.model.dto.update.UpdatePaymentCardDto;
+import innowise.bankingApp.model.entity.PaymentCard;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface PaymentCardMapper {
@@ -24,4 +21,19 @@ public interface PaymentCardMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "active", ignore = true)
     PaymentCard updateEntity(UpdatePaymentCardDto dto, @MappingTarget PaymentCard paymentCard);
+
+    @Named("maskCardNumber")
+    default String maskCardNumber(String number) {
+        if (number == null) {
+            return null;
+        }
+
+        if (number.length() <= 4) {
+            return "*".repeat(number.length());
+        }
+
+        int visibleFrom = number.length() - 4;
+
+        return "*".repeat(visibleFrom) + number.substring(visibleFrom);
+    }
 }

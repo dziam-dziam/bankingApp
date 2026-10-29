@@ -1,6 +1,5 @@
-package innowise.bankingApp.model.entities;
+package innowise.bankingApp.model.entity;
 
-import innowise.bankingApp.AuditableEntity;
 import innowise.bankingApp.exceptions.TooManyPaymentCardsException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

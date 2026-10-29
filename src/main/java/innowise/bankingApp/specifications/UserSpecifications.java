@@ -1,6 +1,6 @@
 package innowise.bankingApp.specifications;
 
-import innowise.bankingApp.model.entities.User;
+import innowise.bankingApp.model.entity.User;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

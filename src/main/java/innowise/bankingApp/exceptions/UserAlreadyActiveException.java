@@ -1,7 +1,14 @@
 package innowise.bankingApp.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class UserAlreadyActiveException extends RuntimeException {
+
+    private final ErrorCode errorCode = ErrorCode.USER_ALREADY_ACTIVE;
+
     public UserAlreadyActiveException() {
-        super("User is already active");
+        super(ErrorCode.USER_ALREADY_ACTIVE.formatMessage());
     }
+
 }

@@ -1,16 +1,17 @@
-package innowise.bankingApp.model.dtos.UpdateDtos;
+package innowise.bankingApp.model.dto.create;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record UpdatePaymentCardDto(
-        @NotNull(message = "Payment card Id cannot be null")
-        @Positive(message = "Payment card Id cannot be negative number")
-        Long id,
+public record CreatePaymentCardDto(
+        @NotNull(message = "User Id cannot be null")
+        @Positive(message = "User Id cannot be negative number")
+        Long userId,
 
         @NotBlank(message = "Card number cannot be empty")
         String number,
@@ -20,6 +21,7 @@ public record UpdatePaymentCardDto(
         String holder,
 
         @NotNull(message = "Expiration date cannot be null")
+        @Future(message = "Expiration date must be in the future")
         LocalDate expirationDate
 ) {
 }

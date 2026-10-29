@@ -1,6 +1,6 @@
 package innowise.bankingApp.repositories;
 
-import innowise.bankingApp.model.entities.User;
+import innowise.bankingApp.model.entity.User;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
