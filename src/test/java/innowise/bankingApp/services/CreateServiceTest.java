@@ -4,7 +4,7 @@ import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.mappers.UserMapper;
 import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
-import innowise.bankingApp.model.entity.User;
+import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserServiceImplTest {
 
     private static final LocalDate BIRTH_DATE = LocalDate.of(2002, 9, 27);
 
@@ -33,7 +33,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Test
     void shouldCreateNewUser() {
@@ -45,7 +45,7 @@ class UserServiceTest {
                 "janek3@gmail.com"
         );
 
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         ResponseUserDto expectedResponse = new ResponseUserDto(
                 1L,
@@ -60,7 +60,7 @@ class UserServiceTest {
         when(userMapper.toDto(user)).thenReturn(expectedResponse);
 
         // when
-        ResponseUserDto result = userService.createNewUser(dto);
+        ResponseUserDto result = userServiceImpl.createNewUser(dto);
 
         // then
         assertEquals(expectedResponse, result);
@@ -75,7 +75,7 @@ class UserServiceTest {
         // when
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userService.createNewUser(null)
+                () -> userServiceImpl.createNewUser(null)
         );
 
         // then

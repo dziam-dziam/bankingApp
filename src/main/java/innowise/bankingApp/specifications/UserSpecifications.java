@@ -1,6 +1,6 @@
 package innowise.bankingApp.specifications;
 
-import innowise.bankingApp.model.entity.User;
+import innowise.bankingApp.model.entity.UserEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public class UserSpecifications {
 
-    public static Specification<User> filter(String name, String surname) {
+    public static Specification<UserEntity> filter(String name, String surname) {
         return ((root, query, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
 

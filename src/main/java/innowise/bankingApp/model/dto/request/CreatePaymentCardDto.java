@@ -9,8 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record CreatePaymentCardDto(
-        @NotNull(message = "User Id cannot be null")
-        @Positive(message = "User Id cannot be negative number")
+        @NotNull(message = "UserEntity Id cannot be null")
+        @Positive(message = "UserEntity Id cannot be negative number")
         Long userId,
 
         @NotBlank(message = "Card number cannot be empty")
