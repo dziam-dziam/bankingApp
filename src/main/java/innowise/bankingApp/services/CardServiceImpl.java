@@ -56,8 +56,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private UserEntity findUserForUpdate(Long userId) {
-        return userRepository.findByIdForUpdate(userId)
-                .orElseThrow(() -> new UserNotFoundByIdException(userId));
+        return userRepository.findByIdForUpdate(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
     }
 
     public ResponsePaymentCardDto getPaymentCard(Long paymentCardId) {
@@ -68,8 +67,7 @@ public class CardServiceImpl implements CardService {
 
     @Transactional(readOnly = true)
     public Page<ResponsePaymentCardDto> getAllPaymentCards(String holderName, String holderSurname, Pageable pageable) {
-        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable)
-                .map(paymentCardMapper::toDto);
+        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable).map(paymentCardMapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -162,8 +160,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private PaymentCardEntity findPaymentCardById(Long cardId) {
-        return paymentCardRepository.findById(cardId)
-                .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
+        return paymentCardRepository.findById(cardId).orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
     }
 
     private static void validateIfNotNull(Object value, ErrorCode errorCode) {
