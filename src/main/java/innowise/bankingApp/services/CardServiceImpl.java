@@ -142,6 +142,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
     public ResponsePaymentCardDto deactivatePaymentCard(Long cardId) {
         validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
         PaymentCardEntity paymentCard = findPaymentCardAndCheckIfDeactivated(cardId);

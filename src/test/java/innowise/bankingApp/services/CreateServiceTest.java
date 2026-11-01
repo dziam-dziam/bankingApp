@@ -33,7 +33,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @InjectMocks
-    private UserUserServiceImpl userServiceImpl;
+    private UserServiceImpl userServiceImpl;
 
     @Test
     void shouldCreateNewUser() {

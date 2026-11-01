@@ -7,8 +7,8 @@ import innowise.bankingApp.exceptions.UserNotFoundByIdException;
 import innowise.bankingApp.mappers.PaymentCardMapper;
 import innowise.bankingApp.mappers.UserMapper;
 import innowise.bankingApp.model.dto.request.CreateUserDto;
-import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.request.UpdateUserDto;
+import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
 import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repositories.UserRepository;
@@ -23,14 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserUserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PaymentCardMapper paymentCardMapper;
 
     public ResponseUserDto createNewUser(CreateUserDto dto) {
-        validateIfNotNull(dto == null, ErrorCode.DTO_REQUIRED);
+        validateIfNotNull(dto, ErrorCode.DTO_REQUIRED);
 
         return createNewUserAndReturnResponseDto(dto);
     }
@@ -44,7 +44,7 @@ public class UserUserServiceImpl implements UserService {
     }
 
     public ResponseUserDto getUser(Long userId) {
-        validateIfNotNull(userId == null, ErrorCode.ID_REQUIRED);
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
 
         return getUserAndReturnResponseDto(userId);
     }
@@ -64,11 +64,12 @@ public class UserUserServiceImpl implements UserService {
     @CacheEvict(cacheNames = "usersWithCards", key = "#userId")
     public ResponseUserDto updateUser(Long userId, UpdateUserDto updateUserDto) {
         validateArguments(userId, updateUserDto);
+
         return updateUserAndReturnResponseDto(userId, updateUserDto);
     }
 
     private static void validateArguments(Long userId, UpdateUserDto updateUserDto) {
-        validateIfNotNull(userId , ErrorCode.ID_REQUIRED);
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
         validateIfNotNull(updateUserDto, ErrorCode.UPDATE_DTO_REQUIRED);
     }
 
@@ -102,10 +103,11 @@ public class UserUserServiceImpl implements UserService {
     @Transactional
     @CacheEvict(cacheNames = "usersWithCards", key = "#userId")
     public ResponseUserDto activateUser(Long userId) {
-        validateIfNotNull(userId == null, ErrorCode.ID_REQUIRED);
-        UserEntity user = findUserAndCheckIfActive(userId);
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
 
+        UserEntity user = findUserAndCheckIfActive(userId);
         user.setActive(true);
+
         return userMapper.toDto(user);
     }
 
@@ -115,22 +117,18 @@ public class UserUserServiceImpl implements UserService {
         if (user.isActive()) {
             throw new UserAlreadyActiveException();
         }
-        return user;
-    }
 
-    private static void validateIfNotNull(Object value, ErrorCode errorCode) {
-        if (value == null) {
-            throw new IllegalArgumentException(errorCode.formatMessage());
-        }
+        return user;
     }
 
     @Transactional
     @CacheEvict(cacheNames = "usersWithCards", key = "#userId")
     public ResponseUserDto deactivateUser(Long userId) {
-        validateIfNotNull(userId == null, ErrorCode.ID_REQUIRED);
-        UserEntity user = findUserAndCheckIfDeactivated(userId);
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
 
+        UserEntity user = findUserAndCheckIfDeactivated(userId);
         user.setActive(false);
+
         return userMapper.toDto(user);
     }
 
@@ -140,16 +138,23 @@ public class UserUserServiceImpl implements UserService {
         if (!user.isActive()) {
             throw new UserAlreadyDeactivatedException();
         }
+
         return user;
     }
 
     @Cacheable(cacheNames = "usersWithCards", key = "#userId", condition = "#userId != null")
     @Transactional(readOnly = true)
     public ResponseUserWithCardsDto getUserWithCards(Long userId) {
-        validateIfNotNull(userId == null, ErrorCode.ID_REQUIRED);
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
 
         UserEntity user = userRepository.findWithCardsById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
 
         return new ResponseUserWithCardsDto(userMapper.toDto(user), user.getPaymentCards().stream().map(paymentCardMapper::toDto).toList());
+    }
+
+    private static void validateIfNotNull(Object value, ErrorCode errorCode) {
+        if (value == null) {
+            throw new IllegalArgumentException(errorCode.formatMessage());
+        }
     }
 }
