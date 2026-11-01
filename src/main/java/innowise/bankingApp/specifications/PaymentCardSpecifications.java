@@ -1,6 +1,6 @@
 package innowise.bankingApp.specifications;
 
-import innowise.bankingApp.model.entity.PaymentCard;
+import innowise.bankingApp.model.entity.PaymentCardEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class PaymentCardSpecifications {
 
-    public static Specification<PaymentCard> filter(
+    public static Specification<PaymentCardEntity> filter(
             String name,
             String surname
     ) {

@@ -3,7 +3,7 @@ package innowise.bankingApp.mappers;
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
-import innowise.bankingApp.model.entity.PaymentCard;
+import innowise.bankingApp.model.entity.PaymentCardEntity;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -16,16 +16,16 @@ public interface PaymentCardMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "active", ignore = true)
-    PaymentCard toEntity(CreatePaymentCardDto dto);
+    PaymentCardEntity toEntity(CreatePaymentCardDto dto);
 
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "number", source = "number", qualifiedByName = "maskCardNumber")
-    ResponsePaymentCardDto toDto(PaymentCard entity);
+    ResponsePaymentCardDto toDto(PaymentCardEntity entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "active", ignore = true)
-    PaymentCard updateEntity(UpdatePaymentCardDto dto, @MappingTarget PaymentCard paymentCard);
+    PaymentCardEntity updateEntity(UpdatePaymentCardDto dto, @MappingTarget PaymentCardEntity paymentCard);
 
     @Named("maskCardNumber")
     default String maskCardNumber(String number) {

@@ -1,7 +1,7 @@
 package innowise.bankingApp;
 
-import innowise.bankingApp.model.entity.PaymentCard;
-import innowise.bankingApp.model.entity.User;
+import innowise.bankingApp.model.entity.PaymentCardEntity;
+import innowise.bankingApp.model.entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
@@ -54,7 +53,7 @@ class UserAuditingTest {
 
     @Test
     void shouldSetAuditDatesOnUserInsert() {
-        User user = newUser();
+        UserEntity user = newUser();
 
         entityManager.persist(user);
         entityManager.flush();
@@ -62,7 +61,7 @@ class UserAuditingTest {
         assertNotNull(id);
         entityManager.clear();
 
-        User saved = entityManager.find(User.class, id);
+        UserEntity saved = entityManager.find(UserEntity.class, id);
 
         assertNotNull(saved);
         assertEquals("Jan", saved.getName());
@@ -72,19 +71,19 @@ class UserAuditingTest {
 
     @Test
     void shouldPreserveCreatedAtAndChangeUpdatedAtOnUserUpdate() {
-        User user = newUser();
+        UserEntity user = newUser();
         entityManager.persist(user);
         entityManager.flush();
         Long id = user.getId();
         entityManager.clear();
 
         auditTime = UPDATED_TIME;
-        User managed = entityManager.find(User.class, id);
+        UserEntity managed = entityManager.find(UserEntity.class, id);
         managed.setName("Anna");
         entityManager.flush();
         entityManager.clear();
 
-        User updated = entityManager.find(User.class, id);
+        UserEntity updated = entityManager.find(UserEntity.class, id);
 
         assertNotNull(updated);
         assertEquals("Anna", updated.getName());
@@ -95,20 +94,20 @@ class UserAuditingTest {
 
     @Test
     void shouldSaveTwoAuditedCardsForSameUser() {
-        User user = newUser();
+        UserEntity user = newUser();
         entityManager.persist(user);
 
-        PaymentCard firstCard = newCard(user, "4111111111111111");
-        PaymentCard secondCard = newCard(user, "5555555555554444");
+        PaymentCardEntity firstCard = newCard(user, "4111111111111111");
+        PaymentCardEntity secondCard = newCard(user, "5555555555554444");
         entityManager.persist(firstCard);
         entityManager.persist(secondCard);
         entityManager.flush();
         Long userId = user.getId();
         entityManager.clear();
 
-        List<PaymentCard> cards = entityManager.createQuery(
-                        "select c from PaymentCard c where c.user.id = :userId order by c.id",
-                        PaymentCard.class)
+        List<PaymentCardEntity> cards = entityManager.createQuery(
+                        "select c from PaymentCardEntity c where c.user.id = :userId order by c.id",
+                        PaymentCardEntity.class)
                 .setParameter("userId", userId)
                 .getResultList();
 
@@ -116,7 +115,7 @@ class UserAuditingTest {
         assertNotEquals(cards.get(0).getId(), cards.get(1).getId());
         assertEquals("4111111111111111", cards.get(0).getNumber());
         assertEquals("5555555555554444", cards.get(1).getNumber());
-        for (PaymentCard card : cards) {
+        for (PaymentCardEntity card : cards) {
             assertEquals(userId, card.getUser().getId());
             assertEquals(CREATED_TIME, card.getCreatedAt());
             assertEquals(CREATED_TIME, card.getUpdatedAt());
@@ -125,21 +124,21 @@ class UserAuditingTest {
 
     @Test
     void shouldPreserveCreatedAtAndChangeUpdatedAtOnCardUpdate() {
-        User user = newUser();
+        UserEntity user = newUser();
         entityManager.persist(user);
-        PaymentCard card = newCard(user, "4111111111111111");
+        PaymentCardEntity card = newCard(user, "4111111111111111");
         entityManager.persist(card);
         entityManager.flush();
         Long id = card.getId();
         entityManager.clear();
 
         auditTime = UPDATED_TIME;
-        PaymentCard managed = entityManager.find(PaymentCard.class, id);
+        PaymentCardEntity managed = entityManager.find(PaymentCardEntity.class, id);
         managed.setActive(false);
         entityManager.flush();
         entityManager.clear();
 
-        PaymentCard updated = entityManager.find(PaymentCard.class, id);
+        PaymentCardEntity updated = entityManager.find(PaymentCardEntity.class, id);
 
         assertNotNull(updated);
         assertFalse(updated.isActive());
@@ -148,8 +147,8 @@ class UserAuditingTest {
         assertTrue(updated.getUpdatedAt().isAfter(updated.getCreatedAt()));
     }
 
-    private User newUser() {
-        User user = new User();
+    private UserEntity newUser() {
+        UserEntity user = new UserEntity();
         user.setName("Jan");
         user.setSurname("Kowalski");
         user.setBirthDate(LocalDate.of(2000, 1, 15));
@@ -158,8 +157,8 @@ class UserAuditingTest {
         return user;
     }
 
-    private PaymentCard newCard(User user, String number) {
-        PaymentCard card = new PaymentCard();
+    private PaymentCardEntity newCard(UserEntity user, String number) {
+        PaymentCardEntity card = new PaymentCardEntity();
         user.addCard(card);
         card.setNumber(number);
         card.setHolder("Jan Kowalski");

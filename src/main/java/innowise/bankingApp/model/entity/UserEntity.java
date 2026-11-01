@@ -25,14 +25,14 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-public class User extends AuditableEntity {
+public class UserEntity extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @Size(max = 5, message = "User cannot have more than 5 cards")
-    private List<PaymentCard> paymentCards = new ArrayList<>();
+    @Size(max = 5, message = "UserEntity cannot have more than 5 cards")
+    private List<PaymentCardEntity> paymentCards = new ArrayList<>();
 
     @NotBlank(message = "Name cannot be empty")
     @Size(min = 1, max = 30, message = "Name has to be between 1 and 30 characters")
@@ -61,7 +61,7 @@ public class User extends AuditableEntity {
             return true;
         }
 
-        if (!(object instanceof User other)) {
+        if (!(object instanceof UserEntity other)) {
             return false;
         }
 
@@ -70,10 +70,10 @@ public class User extends AuditableEntity {
 
     @Override
     public final int hashCode() {
-        return User.class.hashCode();
+        return UserEntity.class.hashCode();
     }
 
-    public void addCard(PaymentCard newCard) {
+    public void addCard(PaymentCardEntity newCard) {
         if (this.paymentCards.size() == 5) {
             throw new TooManyPaymentCardsException();
         }

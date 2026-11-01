@@ -23,16 +23,16 @@ import java.time.LocalDate;
 @Table(name = "payment_cards")
 @Getter
 @Setter
-public class PaymentCard extends AuditableEntity {
+public class PaymentCardEntity extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @NotNull(message = "User cannot be null")
+    @NotNull(message = "UserEntity cannot be null")
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     @Setter(AccessLevel.NONE)
-    private User user;
+    private UserEntity user;
 
     @NotBlank(message = "Card number cannot be empty")
     private String number;
@@ -53,7 +53,7 @@ public class PaymentCard extends AuditableEntity {
             return true;
         }
 
-        if (!(object instanceof PaymentCard other)) {
+        if (!(object instanceof PaymentCardEntity other)) {
             return false;
         }
 
@@ -62,10 +62,10 @@ public class PaymentCard extends AuditableEntity {
 
     @Override
     public final int hashCode() {
-        return PaymentCard.class.hashCode();
+        return PaymentCardEntity.class.hashCode();
     }
 
-    public void assignUser(User user) {
+    public void assignUser(UserEntity user) {
         if (user.getPaymentCards().size() == 5) {
             throw new TooManyPaymentCardsException();
         }

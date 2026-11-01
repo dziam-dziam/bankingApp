@@ -1,15 +1,15 @@
 package innowise.bankingApp.repositories;
 
-import innowise.bankingApp.model.entity.PaymentCard;
+import innowise.bankingApp.model.entity.PaymentCardEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
 public interface PaymentCardRepository extends
-        JpaRepository<PaymentCard, Long>,
-        JpaSpecificationExecutor<PaymentCard> {
+        JpaRepository<PaymentCardEntity, Long>,
+        JpaSpecificationExecutor<PaymentCardEntity> {
 
-    List<PaymentCard> findAllByUserId(Long userId);
+    List<PaymentCardEntity> findAllByUserId(Long userId);
 
 }
