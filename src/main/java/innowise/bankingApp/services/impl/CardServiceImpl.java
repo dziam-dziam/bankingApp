@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.services.impl;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
@@ -13,6 +13,7 @@ import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repositories.PaymentCardRepository;
 import innowise.bankingApp.repositories.UserRepository;
+import innowise.bankingApp.services.interfaces.CardService;
 import innowise.bankingApp.specifications.PaymentCardSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -56,8 +57,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private UserEntity findUserForUpdate(Long userId) {
-        return userRepository.findByIdForUpdate(userId)
-                .orElseThrow(() -> new UserNotFoundByIdException(userId));
+        return userRepository.findByIdForUpdate(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
     }
 
     public ResponsePaymentCardDto getPaymentCard(Long paymentCardId) {
@@ -68,8 +68,7 @@ public class CardServiceImpl implements CardService {
 
     @Transactional(readOnly = true)
     public Page<ResponsePaymentCardDto> getAllPaymentCards(String holderName, String holderSurname, Pageable pageable) {
-        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable)
-                .map(paymentCardMapper::toDto);
+        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable).map(paymentCardMapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -162,8 +161,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private PaymentCardEntity findPaymentCardById(Long cardId) {
-        return paymentCardRepository.findById(cardId)
-                .orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
+        return paymentCardRepository.findById(cardId).orElseThrow(() -> new PaymentCardNotFoundByIdException(cardId));
     }
 
     private static void validateIfNotNull(Object value, ErrorCode errorCode) {
