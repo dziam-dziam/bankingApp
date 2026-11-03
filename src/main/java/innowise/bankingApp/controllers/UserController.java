@@ -4,7 +4,7 @@ import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.request.UpdateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
-import innowise.bankingApp.services.UserService;
+import innowise.bankingApp.services.interfaces.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,9 +42,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserWithCards(id));
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
 
         return ResponseEntity.noContent().build();
     }
@@ -56,19 +56,19 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<ResponseUserDto> updateUser(@PathVariable Long userId, @Valid @RequestBody UpdateUserDto updateUserDto) {
-        return ResponseEntity.ok(userService.updateUser(userId, updateUserDto));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseUserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDto updateUserDto) {
+        return ResponseEntity.ok(userService.updateUser(id, updateUserDto));
     }
 
-    @PutMapping("activate/{userId}")
-    public ResponseEntity<ResponseUserDto> activateUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.activateUser(userId));
+    @PutMapping("activate/{id}")
+    public ResponseEntity<ResponseUserDto> activateUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.activateUser(id));
     }
 
     @Transactional
-    @PutMapping("deactivate/{userId}")
-    public ResponseEntity<ResponseUserDto> deactivateUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.deactivateUser(userId));
+    @PutMapping("deactivate/{id}")
+    public ResponseEntity<ResponseUserDto> deactivateUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.deactivateUser(id));
     }
 }

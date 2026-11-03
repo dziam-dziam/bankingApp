@@ -3,7 +3,7 @@ package innowise.bankingApp.controllers;
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
-import innowise.bankingApp.services.CardService;
+import innowise.bankingApp.services.interfaces.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

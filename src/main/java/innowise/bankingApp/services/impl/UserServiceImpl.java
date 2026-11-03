@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.services.impl;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.UserAlreadyActiveException;
@@ -12,6 +12,7 @@ import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
 import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repositories.UserRepository;
+import innowise.bankingApp.services.interfaces.UserService;
 import innowise.bankingApp.specifications.UserSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;

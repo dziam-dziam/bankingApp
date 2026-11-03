@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.services.impl;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
@@ -13,6 +13,7 @@ import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repositories.PaymentCardRepository;
 import innowise.bankingApp.repositories.UserRepository;
+import innowise.bankingApp.services.interfaces.CardService;
 import innowise.bankingApp.specifications.PaymentCardSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;

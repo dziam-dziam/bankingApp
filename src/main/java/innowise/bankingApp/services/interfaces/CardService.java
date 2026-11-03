@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.services.interfaces;
 
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
