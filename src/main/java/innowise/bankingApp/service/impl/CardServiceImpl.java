@@ -1,4 +1,4 @@
-package innowise.bankingApp.services.impl;
+package innowise.bankingApp.service.impl;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
@@ -11,9 +11,9 @@ import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
 import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
-import innowise.bankingApp.repositories.PaymentCardRepository;
-import innowise.bankingApp.repositories.UserRepository;
-import innowise.bankingApp.services.interfaces.CardService;
+import innowise.bankingApp.repository.PaymentCardRepository;
+import innowise.bankingApp.repository.UserRepository;
+import innowise.bankingApp.service.CardService;
 import innowise.bankingApp.specifications.PaymentCardSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -40,6 +40,71 @@ public class CardServiceImpl implements CardService {
         return createNewPaymentCardAndReturnResponseDto(createDto);
     }
 
+    public ResponsePaymentCardDto getPaymentCard(Long paymentCardId) {
+        validateIfNotNull(paymentCardId, ErrorCode.CARD_ID_REQUIRED);
+
+        return paymentCardMapper.toDto(findPaymentCardById(paymentCardId));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ResponsePaymentCardDto> getAllPaymentCards(String holderName, String holderSurname, Pageable pageable) {
+        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable).map(paymentCardMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponsePaymentCardDto> getAllPaymentCardsByUserId(Long userId) {
+        validateIfNotNull(userId, ErrorCode.USER_ID_REQUIRED);
+
+        return getPaymentCardsByUserIdAndReturnResponseDtos(userId);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
+    public ResponsePaymentCardDto updatePaymentCard(Long cardId, UpdatePaymentCardDto updateDto) {
+        validateUpdateArguments(cardId, updateDto);
+
+        return updatePaymentCardAndReturnResponseDto(cardId, updateDto);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", key = "#result")
+    public Long deletePaymentCard(Long cardId) {
+        validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
+
+        PaymentCardEntity paymentCard = findPaymentCardById(cardId);
+        Long userId = paymentCard.getUser().getId();
+
+        paymentCardRepository.delete(paymentCard);
+
+        return userId;
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", allEntries = true)
+    public void deleteAllPaymentCards() {
+        paymentCardRepository.deleteAll();
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
+    public ResponsePaymentCardDto activatePaymentCard(Long cardId) {
+        validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
+        PaymentCardEntity paymentCard = findPaymentCardAndCheckIfActive(cardId);
+
+        paymentCard.setActive(true);
+        return paymentCardMapper.toDto(paymentCard);
+    }
+
+    @Transactional
+    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
+    public ResponsePaymentCardDto deactivatePaymentCard(Long cardId) {
+        validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
+        PaymentCardEntity paymentCard = findPaymentCardAndCheckIfDeactivated(cardId);
+
+        paymentCard.setActive(false);
+        return paymentCardMapper.toDto(paymentCard);
+    }
+
     private static void validateCreateArguments(CreatePaymentCardDto createDto) {
         validateIfNotNull(createDto, ErrorCode.DTO_REQUIRED);
         validateIfNotNull(createDto.userId(), ErrorCode.USER_ID_REQUIRED);
@@ -60,36 +125,10 @@ public class CardServiceImpl implements CardService {
         return userRepository.findByIdForUpdate(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
     }
 
-    public ResponsePaymentCardDto getPaymentCard(Long paymentCardId) {
-        validateIfNotNull(paymentCardId, ErrorCode.CARD_ID_REQUIRED);
-
-        return paymentCardMapper.toDto(findPaymentCardById(paymentCardId));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ResponsePaymentCardDto> getAllPaymentCards(String holderName, String holderSurname, Pageable pageable) {
-        return paymentCardRepository.findAll(PaymentCardSpecifications.filter(holderName, holderSurname), pageable).map(paymentCardMapper::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ResponsePaymentCardDto> getAllPaymentCardsByUserId(Long userId) {
-        validateIfNotNull(userId, ErrorCode.USER_ID_REQUIRED);
-
-        return getPaymentCardsByUserIdAndReturnResponseDtos(userId);
-    }
-
     private List<ResponsePaymentCardDto> getPaymentCardsByUserIdAndReturnResponseDtos(Long userId) {
         List<PaymentCardEntity> paymentCards = paymentCardRepository.findAllByUserId(userId);
 
         return paymentCards.stream().map(paymentCardMapper::toDto).toList();
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
-    public ResponsePaymentCardDto updatePaymentCard(Long cardId, UpdatePaymentCardDto updateDto) {
-        validateUpdateArguments(cardId, updateDto);
-
-        return updatePaymentCardAndReturnResponseDto(cardId, updateDto);
     }
 
     private static void validateUpdateArguments(Long cardId, UpdatePaymentCardDto updateDto) {
@@ -101,33 +140,8 @@ public class CardServiceImpl implements CardService {
         PaymentCardEntity paymentCard = findPaymentCardById(cardId);
 
         PaymentCardEntity updatedCard = paymentCardMapper.updateEntity(updateDto, paymentCard);
-        PaymentCardEntity savedCard = paymentCardRepository.save(updatedCard);
 
-        return paymentCardMapper.toDto(savedCard);
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "usersWithCards", allEntries = true)
-    public void deletePaymentCard(Long cardId) {
-        PaymentCardEntity paymentCard = findPaymentCardById(cardId);
-
-        paymentCardRepository.delete(paymentCard);
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "usersWithCards", allEntries = true)
-    public void deleteAllPaymentCards() {
-        paymentCardRepository.deleteAll();
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
-    public ResponsePaymentCardDto activatePaymentCard(Long cardId) {
-        validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
-        PaymentCardEntity paymentCard = findPaymentCardAndCheckIfActive(cardId);
-
-        paymentCard.setActive(true);
-        return paymentCardMapper.toDto(paymentCard);
+        return paymentCardMapper.toDto(updatedCard);
     }
 
     private PaymentCardEntity findPaymentCardAndCheckIfActive(Long cardId) {
@@ -138,16 +152,6 @@ public class CardServiceImpl implements CardService {
         }
 
         return paymentCard;
-    }
-
-    @Transactional
-    @CacheEvict(cacheNames = "usersWithCards", key = "#result.userId()")
-    public ResponsePaymentCardDto deactivatePaymentCard(Long cardId) {
-        validateIfNotNull(cardId, ErrorCode.ID_REQUIRED);
-        PaymentCardEntity paymentCard = findPaymentCardAndCheckIfDeactivated(cardId);
-
-        paymentCard.setActive(false);
-        return paymentCardMapper.toDto(paymentCard);
     }
 
     private PaymentCardEntity findPaymentCardAndCheckIfDeactivated(Long cardId) {
