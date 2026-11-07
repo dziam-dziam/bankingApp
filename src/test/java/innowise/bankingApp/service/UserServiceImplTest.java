@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.service;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.UserAlreadyActiveException;
@@ -13,8 +13,8 @@ import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
 import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
-import innowise.bankingApp.repositories.UserRepository;
-import innowise.bankingApp.services.impl.UserServiceImpl;
+import innowise.bankingApp.repository.UserRepository;
+import innowise.bankingApp.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -236,7 +236,7 @@ class UserServiceImplTest {
         notUpdatedUserEntity.setEmail("damian2002@gmail.com");
         notUpdatedUserEntity.setActive(true);
         UpdateUserDto updateUserDto = new UpdateUserDto(
-                userId, "Maciek", "Markowiak", LocalDate.of(1998, 12, 12), "maciek123@gmail.com"
+                "Maciek", "Markowiak", LocalDate.of(1998, 12, 12), "maciek123@gmail.com"
         );
         UserEntity updatedUserEntity = new UserEntity();
         updatedUserEntity.setId(userId);
@@ -257,7 +257,6 @@ class UserServiceImplTest {
         );
         when(userRepository.findById(userId)).thenReturn(Optional.of(notUpdatedUserEntity));
         when(userMapper.updateEntity(updateUserDto, notUpdatedUserEntity)).thenReturn(updatedUserEntity);
-        when(userRepository.save(updatedUserEntity)).thenReturn(savedUserEntity);
         when(userMapper.toDto(savedUserEntity)).thenReturn(expectedResponse);
 
         //when
@@ -267,7 +266,6 @@ class UserServiceImplTest {
         assertSame(expectedResponse, result);
         verify(userRepository).findById(userId);
         verify(userMapper).updateEntity(updateUserDto, notUpdatedUserEntity);
-        verify(userRepository).save(updatedUserEntity);
         verify(userMapper).toDto(savedUserEntity);
     }
 
@@ -276,7 +274,7 @@ class UserServiceImplTest {
         //given
         Long userId = null;
         UpdateUserDto updateUserDto = new UpdateUserDto(
-                1L, "Maciek", "Markowiak", BIRTH_DATE, "maciek123@gmail.com"
+                "Maciek", "Markowiak", BIRTH_DATE, "maciek123@gmail.com"
         );
 
         //when
@@ -310,7 +308,7 @@ class UserServiceImplTest {
         //given
         Long userId = 1L;
         UpdateUserDto updateUserDto = new UpdateUserDto(
-                userId, "Maciek", "Markowiak", BIRTH_DATE, "maciek123@gmail.com"
+                "Maciek", "Markowiak", BIRTH_DATE, "maciek123@gmail.com"
         );
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 

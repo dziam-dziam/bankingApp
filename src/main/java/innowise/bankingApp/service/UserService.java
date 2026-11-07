@@ -1,4 +1,4 @@
-package innowise.bankingApp.services.interfaces;
+package innowise.bankingApp.service;
 
 import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.request.UpdateUserDto;

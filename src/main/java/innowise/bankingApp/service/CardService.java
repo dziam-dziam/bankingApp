@@ -1,4 +1,4 @@
-package innowise.bankingApp.services.interfaces;
+package innowise.bankingApp.service;
 
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
@@ -20,7 +20,7 @@ public interface CardService {
 
     ResponsePaymentCardDto updatePaymentCard(Long cardId, UpdatePaymentCardDto updateDto);
 
-    void deletePaymentCard(Long cardId);
+    Long deletePaymentCard(Long cardId);
 
     void deleteAllPaymentCards();
 

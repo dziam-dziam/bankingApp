@@ -1,4 +1,4 @@
-package innowise.bankingApp.repositories;
+package innowise.bankingApp.repository;
 
 import innowise.bankingApp.model.entity.UserEntity;
 import jakarta.persistence.LockModeType;
