@@ -4,7 +4,6 @@ WORKDIR /build
 COPY pom.xml .
 RUN mvn -B -ntp dependency:go-offline
 COPY src ./src
-# Tests using Testcontainers are run separately, outside the image build.
 RUN mvn -B -ntp -Dmaven.test.skip=true package
 
 FROM eclipse-temurin:21-jre-jammy
