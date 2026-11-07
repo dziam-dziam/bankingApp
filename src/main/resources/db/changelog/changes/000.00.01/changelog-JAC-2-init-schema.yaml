@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: JAC-2-init-schema
+      author: damian
+      changes:
+        - sqlFile:
+            path: create-users.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: create-payment-cards.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: create-indexes.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: add-users-email-unique.sql
+            relativeToChangelogFile: true

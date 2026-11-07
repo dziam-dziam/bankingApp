@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changes/000.00.01/changelog-JAC-2-init-schema.yaml
+      relativeToChangelogFile: true

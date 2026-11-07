@@ -1,9 +1,52 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  app:
+    image: banking-app:local
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: postgres_data
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-InnoBank}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     ports:
-      - '5432'
+      - '127.0.0.1:${APP_PORT:-8081}:8081'
+    depends_on:
+      postgres_data:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres_data:
+    image: 'postgres:18'
+    environment:
+      POSTGRES_DB: ${DB_NAME:-InnoBank}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      POSTGRES_USER: ${DB_USER:-postgres}
+    ports:
+      - '127.0.0.1:${DB_PORT:-5433}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - '127.0.0.1:${REDIS_PORT:-6379}:6379'
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_data:
