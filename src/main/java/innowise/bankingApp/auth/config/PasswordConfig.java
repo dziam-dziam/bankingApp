@@ -1,4 +1,4 @@
-package innowise.bankingApp.config;
+package innowise.bankingApp.auth.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

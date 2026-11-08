@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SERVER_PORT: 8081
@@ -19,6 +20,12 @@ services:
       AUTH_DB_NAME: ${AUTH_DB_NAME:-BankAuth}
       AUTH_DB_USER: ${AUTH_DB_USER:-postgres}
       AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD:?Set AUTH_DB_PASSWORD in .env}
+
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:?Set AUTH_JWT_SECRET in .env}
+      AUTH_JWT_ISSUER: ${AUTH_JWT_ISSUER:-bankingApp}
+      AUTH_ACCESS_TTL: ${AUTH_ACCESS_TTL:-15m}
+      AUTH_REFRESH_TTL: ${AUTH_REFRESH_TTL:-7d}
+      AUTH_BCRYPT_STRENGTH: ${AUTH_BCRYPT_STRENGTH:-12}
 
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -36,6 +43,7 @@ services:
 
   postgres_data:
     image: postgres:18
+
     environment:
       POSTGRES_DB: ${DB_NAME:-InnoBank}
       POSTGRES_USER: ${DB_USER:-postgres}
@@ -56,6 +64,7 @@ services:
 
   postgres_auth:
     image: postgres:18
+
     environment:
       POSTGRES_DB: ${AUTH_DB_NAME:-BankAuth}
       POSTGRES_USER: ${AUTH_DB_USER:-postgres}
@@ -76,6 +85,7 @@ services:
 
   redis:
     image: redis:8-alpine
+
     ports:
       - '127.0.0.1:${REDIS_PORT:-6379}:6379'
 

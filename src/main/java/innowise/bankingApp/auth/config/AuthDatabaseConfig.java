@@ -1,4 +1,4 @@
-package innowise.bankingApp.config;
+package innowise.bankingApp.auth.config;
 
 import innowise.bankingApp.auth.model.entity.CredentialsEntity;
 import jakarta.persistence.EntityManagerFactory;
