@@ -38,10 +38,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR)
                         .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login")
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/login",
+                                "/api/auth/refresh"
+                        )
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/validate")
                         .authenticated()
+                        .requestMatchers("/api/me", "/api/me/**")
+                        .hasAnyRole("ADMIN", "USER")
                         .anyRequest()
                         .hasRole("ADMIN")
                 )

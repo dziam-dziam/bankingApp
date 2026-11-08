@@ -4,10 +4,14 @@ import innowise.bankingApp.auth.config.JwtProperties;
 import innowise.bankingApp.auth.model.dto.response.ResponseTokenPairDto;
 import innowise.bankingApp.auth.model.entity.CredentialsEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,7 @@ import java.util.UUID;
 public class JwtTokenService {
 
     private final JwtEncoder encoder;
+    private final JwtDecoder decoder;
     private final JwtProperties properties;
     private final Clock clock;
 
@@ -38,6 +43,32 @@ public class JwtTokenService {
         );
     }
 
+    public Jwt decodeRefreshToken(String token) {
+        try {
+            Jwt jwt = decoder.decode(token);
+
+            if (!"refresh".equals(jwt.getClaimAsString("token_use"))) {
+                throw new BadCredentialsException(
+                        "Invalid credentials or token"
+                );
+            }
+
+            return jwt;
+        } catch (JwtException | IllegalArgumentException exception) {
+            throw new BadCredentialsException(
+                    "Invalid credentials or token",
+                    exception
+            );
+        }
+    }
+
+    public boolean matchesRefreshToken(String token, String storedHash) {
+        return storedHash != null && MessageDigest.isEqual(
+                hashRefreshToken(token).getBytes(StandardCharsets.US_ASCII),
+                storedHash.getBytes(StandardCharsets.US_ASCII)
+        );
+    }
+
     public String hashRefreshToken(String token) {
         try {
             byte[] digest = MessageDigest.getInstance("SHA-256")
@@ -45,7 +76,10 @@ public class JwtTokenService {
 
             return HexFormat.of().formatHex(digest);
         } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("SHA-256 is unavailable", exception);
+            throw new IllegalStateException(
+                    "SHA-256 is unavailable",
+                    exception
+            );
         }
     }
 

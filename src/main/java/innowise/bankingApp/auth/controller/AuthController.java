@@ -3,6 +3,7 @@ package innowise.bankingApp.auth.controller;
 import innowise.bankingApp.auth.model.Role;
 import innowise.bankingApp.auth.model.dto.request.CreateCredentialsDto;
 import innowise.bankingApp.auth.model.dto.request.LoginDto;
+import innowise.bankingApp.auth.model.dto.request.RefreshTokenDto;
 import innowise.bankingApp.auth.model.dto.response.ResponseCredentialsDto;
 import innowise.bankingApp.auth.model.dto.response.ResponseTokenPairDto;
 import innowise.bankingApp.auth.model.dto.response.ResponseTokenValidationDto;
@@ -36,16 +37,26 @@ public class AuthController {
                 .body(authService.login(dto));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<ResponseTokenPairDto> refresh(
+            @Valid @RequestBody RefreshTokenDto dto
+    ) {
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noStore())
+                .body(authService.refresh(dto));
+    }
+
     @GetMapping("/validate")
     public ResponseEntity<ResponseTokenValidationDto> validate(
             @AuthenticationPrincipal Jwt jwt
     ) {
-        ResponseTokenValidationDto response = new ResponseTokenValidationDto(
-                true,
-                Long.valueOf(jwt.getSubject()),
-                Role.valueOf(jwt.getClaimAsString("role")),
-                jwt.getExpiresAt()
-        );
+        ResponseTokenValidationDto response =
+                new ResponseTokenValidationDto(
+                        true,
+                        Long.valueOf(jwt.getSubject()),
+                        Role.valueOf(jwt.getClaimAsString("role")),
+                        jwt.getExpiresAt()
+                );
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noStore())

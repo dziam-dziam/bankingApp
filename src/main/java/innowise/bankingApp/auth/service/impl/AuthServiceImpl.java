@@ -2,6 +2,7 @@ package innowise.bankingApp.auth.service.impl;
 
 import innowise.bankingApp.auth.model.dto.request.CreateCredentialsDto;
 import innowise.bankingApp.auth.model.dto.request.LoginDto;
+import innowise.bankingApp.auth.model.dto.request.RefreshTokenDto;
 import innowise.bankingApp.auth.model.dto.response.ResponseCredentialsDto;
 import innowise.bankingApp.auth.model.dto.response.ResponseTokenPairDto;
 import innowise.bankingApp.auth.model.entity.CredentialsEntity;
@@ -12,6 +13,7 @@ import innowise.bankingApp.exception.UserNotFoundByIdException;
 import innowise.bankingApp.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -64,7 +66,8 @@ public class AuthServiceImpl implements AuthService {
         credentials.setPasswordHash(passwordEncoder.encode(dto.password()));
         credentials.setRole(dto.role());
 
-        CredentialsEntity saved = credentialsRepository.saveAndFlush(credentials);
+        CredentialsEntity saved =
+                credentialsRepository.saveAndFlush(credentials);
 
         return new ResponseCredentialsDto(
                 saved.getId(),
@@ -90,13 +93,49 @@ public class AuthServiceImpl implements AuthService {
                         && passwordEncoder.matches(dto.password(), storedHash);
 
         if (!passwordMatches || credentials == null) {
-            throw new BadCredentialsException("Invalid credentials or token");
+            throw new BadCredentialsException(
+                    "Invalid credentials or token"
+            );
         }
 
         if (!userRepository.existsByIdAndActiveTrue(credentials.getUserId())) {
-            throw new BadCredentialsException("Invalid credentials or token");
+            throw new BadCredentialsException(
+                    "Invalid credentials or token"
+            );
         }
 
+        return issueTokens(credentials);
+    }
+
+    @Override
+    @Transactional("authTransactionManager")
+    public ResponseTokenPairDto refresh(RefreshTokenDto dto) {
+        Jwt jwt = jwtTokenService.decodeRefreshToken(dto.refreshToken());
+        Long userId = Long.valueOf(jwt.getSubject());
+
+        CredentialsEntity credentials = credentialsRepository
+                .findByUserIdForUpdate(userId)
+                .orElseThrow(() -> new BadCredentialsException(
+                        "Invalid credentials or token"
+                ));
+
+        if (!jwtTokenService.matchesRefreshToken(
+                dto.refreshToken(),
+                credentials.getRefreshTokenHash()
+        )
+                || !credentials.getRole().name().equals(
+                jwt.getClaimAsString("role")
+        )
+                || !userRepository.existsByIdAndActiveTrue(userId)) {
+            throw new BadCredentialsException(
+                    "Invalid credentials or token"
+            );
+        }
+
+        return issueTokens(credentials);
+    }
+
+    private ResponseTokenPairDto issueTokens(CredentialsEntity credentials) {
         ResponseTokenPairDto tokens =
                 jwtTokenService.generateTokens(credentials);
 
