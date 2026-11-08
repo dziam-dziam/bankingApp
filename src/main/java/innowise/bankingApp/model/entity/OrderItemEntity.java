@@ -23,7 +23,7 @@ public class OrderItemEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_items_generator")
-    @SequenceGenerator(name = "order_items_generator", sequenceName = "order_items_seq", allocationSize = 10)
+    @SequenceGenerator(name = "order_items_generator", sequenceName = "order_items_seq", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
