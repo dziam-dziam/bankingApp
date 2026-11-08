@@ -71,7 +71,7 @@ public class OrderEntity extends AuditableEntity {
     }
 
     @Override
-    public final boolean equals(Object object) {
+    public boolean equals(Object object) {
         if (this == object) {
             return true;
         }
@@ -84,7 +84,7 @@ public class OrderEntity extends AuditableEntity {
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return OrderEntity.class.hashCode();
     }
 }

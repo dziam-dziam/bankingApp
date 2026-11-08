@@ -42,7 +42,7 @@ public class OrderItemEntity extends AuditableEntity {
     private Integer quantity;
 
     @Override
-    public final boolean equals(Object object) {
+    public boolean equals(Object object) {
         if (this == object) {
             return true;
         }
@@ -55,7 +55,7 @@ public class OrderItemEntity extends AuditableEntity {
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return OrderItemEntity.class.hashCode();
     }
 }
