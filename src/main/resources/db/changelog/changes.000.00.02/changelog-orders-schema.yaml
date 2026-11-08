@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: orders-001-create-schema
+      author: damian
+      changes:
+        - sqlFile:
+            path: create-items.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: create-orders.sql
+            relativeToChangelogFile: true
+        - sqlFile:
+            path: create-order-items.sql
+            relativeToChangelogFile: true
+      rollback:
+        - dropTable:
+            tableName: order_items
+        - dropTable:
+            tableName: orders
+        - dropTable:
+            tableName: items
+
+  - changeSet:
+      id: orders-002-create-indexes
+      author: damian
+      changes:
+        - sqlFile:
+            path: create-order-indexes.sql
+            relativeToChangelogFile: true
+      rollback:
+        - dropIndex:
+            indexName: idx_orders_user_id
+            tableName: orders
+        - dropIndex:
+            indexName: idx_orders_status
+            tableName: orders
+        - dropIndex:
+            indexName: idx_order_items_order_id
+            tableName: order_items
+        - dropIndex:
+            indexName: idx_order_items_item_id
+            tableName: order_items
+        - dropIndex:
+            indexName: idx_items_name
+            tableName: items
