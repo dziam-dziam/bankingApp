@@ -29,7 +29,7 @@ public class ItemEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "items_generator")
-    @SequenceGenerator(name = "items_generator", sequenceName = "items_seq", allocationSize = 10)
+    @SequenceGenerator(name = "items_generator", sequenceName = "items_seq", allocationSize = 1)
     private Long id;
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
