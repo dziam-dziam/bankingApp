@@ -1,4 +1,4 @@
-package innowise.bankingApp.mappers;
+package innowise.bankingApp.mapper;
 
 import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;

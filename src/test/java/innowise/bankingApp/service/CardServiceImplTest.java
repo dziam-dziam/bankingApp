@@ -1,12 +1,12 @@
 package innowise.bankingApp.service;
 
-import innowise.bankingApp.exceptions.ErrorCode;
-import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
-import innowise.bankingApp.exceptions.PaymentCardAlreadyDeactivatedException;
-import innowise.bankingApp.exceptions.PaymentCardNotFoundByIdException;
-import innowise.bankingApp.exceptions.TooManyPaymentCardsException;
-import innowise.bankingApp.exceptions.UserNotFoundByIdException;
-import innowise.bankingApp.mappers.PaymentCardMapper;
+import innowise.bankingApp.exception.ErrorCode;
+import innowise.bankingApp.exception.PaymentCardAlreadyActiveException;
+import innowise.bankingApp.exception.PaymentCardAlreadyDeactivatedException;
+import innowise.bankingApp.exception.PaymentCardNotFoundByIdException;
+import innowise.bankingApp.exception.TooManyPaymentCardsException;
+import innowise.bankingApp.exception.UserNotFoundByIdException;
+import innowise.bankingApp.mapper.PaymentCardMapper;
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;

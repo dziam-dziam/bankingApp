@@ -1,11 +1,11 @@
 package innowise.bankingApp.service.impl;
 
-import innowise.bankingApp.exceptions.ErrorCode;
-import innowise.bankingApp.exceptions.UserAlreadyActiveException;
-import innowise.bankingApp.exceptions.UserAlreadyDeactivatedException;
-import innowise.bankingApp.exceptions.UserNotFoundByIdException;
-import innowise.bankingApp.mappers.PaymentCardMapper;
-import innowise.bankingApp.mappers.UserMapper;
+import innowise.bankingApp.exception.ErrorCode;
+import innowise.bankingApp.exception.UserAlreadyActiveException;
+import innowise.bankingApp.exception.UserAlreadyDeactivatedException;
+import innowise.bankingApp.exception.UserNotFoundByIdException;
+import innowise.bankingApp.mapper.PaymentCardMapper;
+import innowise.bankingApp.mapper.UserMapper;
 import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.request.UpdateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
@@ -13,7 +13,7 @@ import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
 import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repository.UserRepository;
 import innowise.bankingApp.service.UserService;
-import innowise.bankingApp.specifications.UserSpecifications;
+import innowise.bankingApp.specification.UserSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

@@ -1,4 +1,4 @@
-package innowise.bankingApp.controllers;
+package innowise.bankingApp.controller;
 
 import innowise.bankingApp.model.dto.request.CreateUserDto;
 import innowise.bankingApp.model.dto.request.UpdateUserDto;

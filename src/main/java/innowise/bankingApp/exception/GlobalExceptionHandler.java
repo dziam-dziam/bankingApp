@@ -1,4 +1,4 @@
-package innowise.bankingApp.exceptions;
+package innowise.bankingApp.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

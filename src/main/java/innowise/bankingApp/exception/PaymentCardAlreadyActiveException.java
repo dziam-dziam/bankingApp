@@ -1,4 +1,4 @@
-package innowise.bankingApp.exceptions;
+package innowise.bankingApp.exception;
 
 import lombok.Getter;
 

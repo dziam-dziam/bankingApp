@@ -1,4 +1,4 @@
-package innowise.bankingApp.specifications;
+package innowise.bankingApp.specification;
 
 import innowise.bankingApp.model.entity.UserEntity;
 import jakarta.persistence.criteria.Predicate;

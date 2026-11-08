@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @ActiveProfiles("integration")
+@WithMockUser(username = "test-user", roles = "ADMIN")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class UserCacheFlowTest {
 
@@ -79,7 +80,7 @@ public class UserCacheFlowTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldCacheUserWithCards() throws Exception {
         // given
         UserEntity user = new UserEntity();

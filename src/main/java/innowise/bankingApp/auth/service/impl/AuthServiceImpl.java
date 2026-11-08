@@ -8,7 +8,7 @@ import innowise.bankingApp.auth.model.entity.CredentialsEntity;
 import innowise.bankingApp.auth.repository.CredentialsRepository;
 import innowise.bankingApp.auth.service.AuthService;
 import innowise.bankingApp.auth.service.JwtTokenService;
-import innowise.bankingApp.exceptions.UserNotFoundByIdException;
+import innowise.bankingApp.exception.UserNotFoundByIdException;
 import innowise.bankingApp.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;

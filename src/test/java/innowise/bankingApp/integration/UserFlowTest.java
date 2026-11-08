@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @ActiveProfiles("integration")
+@WithMockUser(username = "test-user", roles = "ADMIN")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserFlowTest {
 
@@ -64,7 +65,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldCreateNewUser() throws Exception {
         //given
         String createUserJson = """
@@ -98,7 +99,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldGetUserById() throws Exception {
         // given
         UserEntity user = new UserEntity();
@@ -123,7 +124,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldGetAllUsers() throws Exception {
         //given
         UserEntity userOne = new UserEntity();
@@ -156,7 +157,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldDeleteUser () throws Exception{
         //given
         UserEntity userOne = new UserEntity();
@@ -184,7 +185,7 @@ class UserFlowTest {
 
     }
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldDeleteAllUsers () throws Exception{
         //given
         UserEntity userOne = new UserEntity();
@@ -214,7 +215,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldUpdateUser () throws Exception {
         //given
         UserEntity userOne = new UserEntity();
@@ -258,7 +259,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldActivateUser() throws Exception {
         // given
         UserEntity user = new UserEntity();
@@ -284,7 +285,7 @@ class UserFlowTest {
     }
 
     @Test
-    @WithMockUser(username = "test-user")
+    @WithMockUser(username = "test-user", roles = "ADMIN")
     void shouldDeactivateUser() throws Exception {
         // given
         UserEntity user = new UserEntity();
