@@ -1,4 +1,4 @@
-package innowise.bankingApp.services.impl;
+package innowise.bankingApp.service.impl;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.UserAlreadyActiveException;
@@ -11,8 +11,8 @@ import innowise.bankingApp.model.dto.request.UpdateUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserDto;
 import innowise.bankingApp.model.dto.response.ResponseUserWithCardsDto;
 import innowise.bankingApp.model.entity.UserEntity;
-import innowise.bankingApp.repositories.UserRepository;
-import innowise.bankingApp.services.interfaces.UserService;
+import innowise.bankingApp.repository.UserRepository;
+import innowise.bankingApp.service.UserService;
 import innowise.bankingApp.specifications.UserSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,24 +36,11 @@ public class UserServiceImpl implements UserService {
         return createNewUserAndReturnResponseDto(dto);
     }
 
-    private ResponseUserDto createNewUserAndReturnResponseDto(CreateUserDto dto) {
-        UserEntity newUser = userMapper.toEntity(dto);
-        newUser.setActive(true);
-        userRepository.save(newUser);
-
-        return userMapper.toDto(newUser);
-    }
 
     public ResponseUserDto getUser(Long userId) {
         validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
 
         return getUserAndReturnResponseDto(userId);
-    }
-
-    private ResponseUserDto getUserAndReturnResponseDto(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
-
-        return userMapper.toDto(user);
     }
 
     @Transactional(readOnly = true)
@@ -69,30 +56,10 @@ public class UserServiceImpl implements UserService {
         return updateUserAndReturnResponseDto(userId, updateUserDto);
     }
 
-    private static void validateArguments(Long userId, UpdateUserDto updateUserDto) {
-        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
-        validateIfNotNull(updateUserDto, ErrorCode.UPDATE_DTO_REQUIRED);
-    }
-
-    private ResponseUserDto updateUserAndReturnResponseDto(Long userId, UpdateUserDto updateUserDto) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
-
-        UserEntity updatedUser = userMapper.updateEntity(updateUserDto, user);
-        UserEntity savedUser = userRepository.save(updatedUser);
-
-        return userMapper.toDto(savedUser);
-    }
-
     @Transactional
     @CacheEvict(cacheNames = "usersWithCards", key = "#userId")
     public void deleteUser(Long userId) {
         findAndDeleteUser(userId);
-    }
-
-    private void findAndDeleteUser(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
-
-        userRepository.delete(user);
     }
 
     @Transactional
@@ -112,16 +79,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
-    private UserEntity findUserAndCheckIfActive(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
-
-        if (user.isActive()) {
-            throw new UserAlreadyActiveException();
-        }
-
-        return user;
-    }
-
     @Transactional
     @CacheEvict(cacheNames = "usersWithCards", key = "#userId")
     public ResponseUserDto deactivateUser(Long userId) {
@@ -133,15 +90,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
-    private UserEntity findUserAndCheckIfDeactivated(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
-
-        if (!user.isActive()) {
-            throw new UserAlreadyDeactivatedException();
-        }
-
-        return user;
-    }
 
     @Cacheable(cacheNames = "usersWithCards", key = "#userId", condition = "#userId != null")
     @Transactional(readOnly = true)
@@ -150,7 +98,61 @@ public class UserServiceImpl implements UserService {
 
         UserEntity user = userRepository.findWithCardsById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
 
-        return new ResponseUserWithCardsDto(userMapper.toDto(user), user.getPaymentCards().stream().map(paymentCardMapper::toDto).toList());
+        return new ResponseUserWithCardsDto(userMapper.toDto(user), user.getPaymentCards()
+                .stream().map(paymentCardMapper::toDto).toList());
+    }
+
+    private ResponseUserDto createNewUserAndReturnResponseDto(CreateUserDto dto) {
+        UserEntity newUser = userMapper.toEntity(dto);
+        newUser.setActive(true);
+        userRepository.save(newUser);
+
+        return userMapper.toDto(newUser);
+    }
+
+    private ResponseUserDto getUserAndReturnResponseDto(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
+
+        return userMapper.toDto(user);
+    }
+
+    private static void validateArguments(Long userId, UpdateUserDto updateUserDto) {
+        validateIfNotNull(userId, ErrorCode.ID_REQUIRED);
+        validateIfNotNull(updateUserDto, ErrorCode.UPDATE_DTO_REQUIRED);
+    }
+
+    private ResponseUserDto updateUserAndReturnResponseDto(Long userId, UpdateUserDto updateUserDto) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
+
+        UserEntity updatedUser = userMapper.updateEntity(updateUserDto, user);
+
+        return userMapper.toDto(updatedUser);
+    }
+
+    private void findAndDeleteUser(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
+
+        userRepository.delete(user);
+    }
+
+    private UserEntity findUserAndCheckIfActive(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
+
+        if (user.isActive()) {
+            throw new UserAlreadyActiveException();
+        }
+
+        return user;
+    }
+
+    private UserEntity findUserAndCheckIfDeactivated(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundByIdException(userId));
+
+        if (!user.isActive()) {
+            throw new UserAlreadyDeactivatedException();
+        }
+
+        return user;
     }
 
     private static void validateIfNotNull(Object value, ErrorCode errorCode) {

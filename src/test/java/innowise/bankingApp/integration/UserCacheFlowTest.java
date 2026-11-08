@@ -2,7 +2,7 @@ package innowise.bankingApp.integration;
 
 import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
-import innowise.bankingApp.repositories.UserRepository;
+import innowise.bankingApp.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -3,14 +3,22 @@ package innowise.bankingApp.controllers;
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
-import innowise.bankingApp.services.interfaces.CardService;
+import innowise.bankingApp.service.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -22,7 +30,8 @@ public class PaymentCardController {
     private final CardService cardService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponsePaymentCardDto> createNewPaymentCard(@Valid @RequestBody CreatePaymentCardDto createPaymentCardDto) {
+    public ResponseEntity<ResponsePaymentCardDto> createPaymentCard(
+            @Valid @RequestBody CreatePaymentCardDto createPaymentCardDto) {
         return ResponseEntity.ok(cardService.createNewPaymentCard(createPaymentCardDto));
     }
 
@@ -32,7 +41,9 @@ public class PaymentCardController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<Page<ResponsePaymentCardDto>> getAllPaymentCards(@RequestParam(required = false) String holderName, @RequestParam(required = false) String holderSurname, Pageable pageable) {
+    public ResponseEntity<Page<ResponsePaymentCardDto>> getAllPaymentCards(
+            @RequestParam(required = false) String holderName,
+            @RequestParam(required = false) String holderSurname, Pageable pageable) {
         Page<ResponsePaymentCardDto> paymentCards = cardService.getAllPaymentCards(holderName, holderSurname, pageable);
 
         return ResponseEntity.ok(paymentCards);
@@ -53,7 +64,9 @@ public class PaymentCardController {
     }
 
     @PutMapping("/update/{cardId}")
-    public ResponseEntity<ResponsePaymentCardDto> updatePaymentCard(@PathVariable Long cardId, @Valid @RequestBody UpdatePaymentCardDto updatePaymentCardDto) {
+    public ResponseEntity<ResponsePaymentCardDto> updatePaymentCard(
+            @PathVariable Long cardId,
+            @Valid @RequestBody UpdatePaymentCardDto updatePaymentCardDto) {
         return ResponseEntity.ok(cardService.updatePaymentCard(cardId, updatePaymentCardDto));
     }
 

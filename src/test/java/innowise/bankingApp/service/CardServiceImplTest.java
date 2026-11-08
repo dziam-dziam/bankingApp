@@ -1,4 +1,4 @@
-package innowise.bankingApp.services;
+package innowise.bankingApp.service;
 
 import innowise.bankingApp.exceptions.ErrorCode;
 import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
@@ -12,9 +12,9 @@ import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
 import innowise.bankingApp.model.entity.PaymentCardEntity;
 import innowise.bankingApp.model.entity.UserEntity;
-import innowise.bankingApp.repositories.PaymentCardRepository;
-import innowise.bankingApp.repositories.UserRepository;
-import innowise.bankingApp.services.impl.CardServiceImpl;
+import innowise.bankingApp.repository.PaymentCardRepository;
+import innowise.bankingApp.repository.UserRepository;
+import innowise.bankingApp.service.impl.CardServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -434,7 +434,6 @@ class CardServiceImplTest {
         when(paymentCardRepository.findById(paymentCardId)).thenReturn(Optional.of(notUpdatedPaymentCardEntity));
         when(paymentCardMapper.updateEntity(updatePaymentCardDto, notUpdatedPaymentCardEntity))
                 .thenReturn(updatedPaymentCardEntity);
-        when(paymentCardRepository.save(updatedPaymentCardEntity)).thenReturn(savedPaymentCardEntity);
         when(paymentCardMapper.toDto(savedPaymentCardEntity)).thenReturn(expectedResponse);
 
         //when
@@ -444,7 +443,6 @@ class CardServiceImplTest {
         assertSame(expectedResponse, result);
         verify(paymentCardRepository).findById(paymentCardId);
         verify(paymentCardMapper).updateEntity(updatePaymentCardDto, notUpdatedPaymentCardEntity);
-        verify(paymentCardRepository).save(updatedPaymentCardEntity);
         verify(paymentCardMapper).toDto(savedPaymentCardEntity);
     }
 
@@ -507,8 +505,11 @@ class CardServiceImplTest {
     void shouldDeletePaymentCard() {
         //given
         Long paymentCardId = 2L;
+        UserEntity user = new UserEntity();
+        user.setId(1L);
         PaymentCardEntity paymentCardEntity = new PaymentCardEntity();
         paymentCardEntity.setId(paymentCardId);
+        paymentCardEntity.assignUser(user);
         when(paymentCardRepository.findById(paymentCardId)).thenReturn(Optional.of(paymentCardEntity));
 
         //when
