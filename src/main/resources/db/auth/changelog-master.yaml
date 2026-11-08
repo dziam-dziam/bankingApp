@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: auth-001-create-credentials
+      author: damian
+      changes:
+        - sqlFile:
+            path: create-credentials.sql
+            relativeToChangelogFile: true
+      rollback:
+        - dropTable:
+            tableName: credentials
+        - dropSequence:
+            sequenceName: credentials_seq
