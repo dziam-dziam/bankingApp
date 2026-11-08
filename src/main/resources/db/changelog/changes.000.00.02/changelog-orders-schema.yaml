@@ -1,5 +1,20 @@
 databaseChangeLog:
   - changeSet:
+      id: orders-000-create-sequences
+      author: damian
+      changes:
+        - sqlFile:
+            path: create-order-sequences.sql
+            relativeToChangelogFile: true
+      rollback:
+        - dropSequence:
+            sequenceName: order_items_seq
+        - dropSequence:
+            sequenceName: orders_seq
+        - dropSequence:
+            sequenceName: items_seq
+
+  - changeSet:
       id: orders-001-create-schema
       author: damian
       changes:
