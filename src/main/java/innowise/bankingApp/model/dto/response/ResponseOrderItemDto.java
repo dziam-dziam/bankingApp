@@ -1,4 +1,9 @@
 package innowise.bankingApp.model.dto.response;
 
-public class ResponseOrderItemDto {
+public record ResponseOrderItemDto(
+        Long id,
+        Long itemId,
+        String itemName,
+        Integer quantity
+) {
 }
