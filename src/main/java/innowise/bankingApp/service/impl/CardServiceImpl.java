@@ -1,11 +1,11 @@
 package innowise.bankingApp.service.impl;
 
-import innowise.bankingApp.exceptions.ErrorCode;
-import innowise.bankingApp.exceptions.PaymentCardAlreadyActiveException;
-import innowise.bankingApp.exceptions.PaymentCardAlreadyDeactivatedException;
-import innowise.bankingApp.exceptions.PaymentCardNotFoundByIdException;
-import innowise.bankingApp.exceptions.UserNotFoundByIdException;
-import innowise.bankingApp.mappers.PaymentCardMapper;
+import innowise.bankingApp.exception.ErrorCode;
+import innowise.bankingApp.exception.PaymentCardAlreadyActiveException;
+import innowise.bankingApp.exception.PaymentCardAlreadyDeactivatedException;
+import innowise.bankingApp.exception.PaymentCardNotFoundByIdException;
+import innowise.bankingApp.exception.UserNotFoundByIdException;
+import innowise.bankingApp.mapper.PaymentCardMapper;
 import innowise.bankingApp.model.dto.request.CreatePaymentCardDto;
 import innowise.bankingApp.model.dto.request.UpdatePaymentCardDto;
 import innowise.bankingApp.model.dto.response.ResponsePaymentCardDto;
@@ -14,7 +14,7 @@ import innowise.bankingApp.model.entity.UserEntity;
 import innowise.bankingApp.repository.PaymentCardRepository;
 import innowise.bankingApp.repository.UserRepository;
 import innowise.bankingApp.service.CardService;
-import innowise.bankingApp.specifications.PaymentCardSpecifications;
+import innowise.bankingApp.specification.PaymentCardSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;

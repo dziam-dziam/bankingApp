@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpec
     @EntityGraph(attributePaths = "paymentCards")
     @Query("select u from UserEntity u where u.id = :id")
     Optional<UserEntity> findWithCardsById(@Param("id") Long id);
+
+    boolean existsByIdAndActiveTrue(Long id);
 }
