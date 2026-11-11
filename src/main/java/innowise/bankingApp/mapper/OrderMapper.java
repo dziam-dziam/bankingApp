@@ -8,7 +8,10 @@ import innowise.bankingApp.model.entity.OrderItemEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-
+import innowise.bankingApp.model.dto.request.CreateOrderDto;
+import innowise.bankingApp.model.dto.request.UpdateOrderDto;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.MappingTarget;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,6 +28,14 @@ public interface OrderMapper {
     @Mapping(target = "itemId", source = "item.id")
     @Mapping(target = "itemName", source = "item.name")
     ResponseOrderItemDto toDto(OrderItemEntity entity);
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "status", source = "status")
+    OrderEntity toEntity(CreateOrderDto dto);
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "status", source = "status")
+    OrderEntity updateEntity(UpdateOrderDto dto, @MappingTarget OrderEntity order);
 
     default List<ResponseOrderItemDto> mapOrderItems(
             List<OrderItemEntity> entities

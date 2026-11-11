@@ -18,13 +18,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
+import org.hibernate.annotations.SQLRestriction;
+import jakarta.persistence.CascadeType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@SQLRestriction("deleted = false")
 @Getter
 @Setter
 public class OrderEntity extends AuditableEntity {
@@ -39,7 +41,11 @@ public class OrderEntity extends AuditableEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "order",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+    )
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     @NotBlank(message = "Status cannot be empty")

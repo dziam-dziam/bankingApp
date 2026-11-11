@@ -124,22 +124,29 @@ class OrderCatalogApiTest {
     }
 
     @Test
-    void shouldListOrdersFromDifferentUsersIncludingDeletedOrders() throws Exception {
-        OrderEntity open = order(owner(), "NEW", false);
+    void shouldListOrdersFromDifferentUsersAndHideDeletedOrders() throws Exception {
+        // given
+        OrderEntity first = order(owner(), "NEW", false);
         OrderEntity deleted = order(owner(), "CANCELLED", true);
+        OrderEntity second = order(owner(), "PROCESSING", false);
         flushAndClear();
 
-        mvc.perform(get("/api/orders").param("size", "1"))
+        // when / then
+        mvc.perform(get("/api/orders").param("size", "1").param("page", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(2))
                 .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].id").value(open.getId()))
-                .andExpect(jsonPath("$.content[0].userId").value(open.getUser().getId()));
+                .andExpect(jsonPath("$.content[0].id").value(first.getId()))
+                .andExpect(jsonPath("$.content[0].userId").value(first.getUser().getId()));
+
         mvc.perform(get("/api/orders").param("size", "1").param("page", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].id").value(deleted.getId()))
-                .andExpect(jsonPath("$.content[0].userId").value(deleted.getUser().getId()))
-                .andExpect(jsonPath("$.content[0].deleted").value(true));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].id").value(second.getId()))
+                .andExpect(jsonPath("$.content[0].userId").value(second.getUser().getId()));
+
+        mvc.perform(get("/api/orders/{id}", deleted.getId()))
+                .andExpect(status().isNotFound());
     }
 
     @Test
