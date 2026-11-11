@@ -1,0 +1,14 @@
+CREATE TABLE order_items (
+    id BIGINT NOT NULL DEFAULT nextval('order_items_seq'),
+    order_id BIGINT NOT NULL,
+    item_id BIGINT NOT NULL,
+    quantity INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    CONSTRAINT order_items_key PRIMARY KEY (id),
+    CONSTRAINT fk_order_items_order FOREIGN KEY (order_id)
+        REFERENCES orders (id) ON DELETE CASCADE,
+    CONSTRAINT fk_order_items_item FOREIGN KEY (item_id)
+        REFERENCES items (id),
+    CONSTRAINT chk_order_items_quantity CHECK (quantity > 0)
+);
